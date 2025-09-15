@@ -1,0 +1,459 @@
+
+
+SUMMARY REPORT 'TurboSLIM XGB', WE DONT USE UMAP VALUES FOR XGB HERE.
+
+
+###########################################################################################
+##############  Chain Regression + Bayesian Impute ( DUMPED X )   ########################
+###########################################################################################
+
+
+
+================================================================================
+CROSS-VALIDATION RESULTS
+================================================================================
+
+Model 1: Text + Numeric Features -> Subset of Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.77062827 0.65627447 0.7777237  0.70365834 0.73081382]
+Mean R² Score: 0.7278 (+/- 0.0896)
+Cross-Validation MAE Scores: [7.81468884 7.6524076  7.23901551 6.86122452 7.31652738]
+Mean MAE Score: 7.3768 (+/- 0.6670)
+
+Model 2: Text Features Only -> All Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.37962407 0.39167191 0.44424114 0.41806179 0.43493363]
+Mean R² Score: 0.4137 (+/- 0.0494)
+Cross-Validation MAE Scores: [31.09355881 32.08102302 31.20966164 32.1558504  31.02999568]
+Mean MAE Score: 31.5140 (+/- 0.9948)
+
+================================================================================
+DETAILED EVALUATION ON HOLDOUT TEST SET
+================================================================================
+
+Training Model 1 on full training set...
+
+Model 1 - Individual Target Performance:
+------------------------------------------------------------
+calories                  | MAE:    7.63 | MSE:     179.32 | R²:  0.994
+calcium                   | MAE:   46.10 | MSE:   29882.17 | R²:  0.282 <=
+saturated_fat             | MAE:    0.77 | MSE:       7.13 | R²:  0.823
+fiber                     | MAE:    1.06 | MSE:       5.46 | R²:  0.614
+saturated_fatty_acids     | MAE:    0.72 | MSE:       6.01 | R²:  0.851
+monounsaturated_fatty_acids | MAE:    0.91 | MSE:       7.23 | R²:  0.846
+polyunsaturated_fatty_acids | MAE:    0.85 | MSE:       5.75 | R²:  0.705
+fatty_acids_total_trans   | MAE:    3.86 | MSE:    2062.18 | R²:  0.903
+
+Training Model 2 on full training set...
+
+Model 2 - Individual Target Performance:
+------------------------------------------------------------
+protein                   | MAE:    3.07 | MSE:      24.26 | R²:  0.767
+calories                  | MAE:   66.27 | MSE:   10117.28 | R²:  0.634
+calcium                   | MAE:   55.94 | MSE:   33352.03 | R²:  0.199 <=
+total_fat                 | MAE:    6.10 | MSE:     129.58 | R²:  0.447
+saturated_fat             | MAE:    2.18 | MSE:      25.93 | R²:  0.358
+cholesterol               | MAE:   21.90 | MSE:   14365.06 | R²:  0.325
+sodium                    | MAE:  207.59 | MSE:  713550.99 | R²: -0.029 <=
+carbohydrate              | MAE:    8.71 | MSE:     201.34 | R²:  0.735
+fiber                     | MAE:    1.32 | MSE:       7.23 | R²:  0.490
+saturated_fatty_acids     | MAE:    2.17 | MSE:      26.11 | R²:  0.353
+monounsaturated_fatty_acids | MAE:    2.62 | MSE:      28.61 | R²:  0.390
+polyunsaturated_fatty_acids | MAE:    1.59 | MSE:      14.04 | R²:  0.279 <=
+fatty_acids_total_trans   | MAE:   21.47 | MSE:   14186.63 | R²:  0.333
+
+================================================================================
+EXAMPLE PREDICTIONS
+================================================================================
+
+Making predictions for new food...
+
+Model 1 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+calories                 :   389.36
+calcium                  :    67.97
+saturated_fat            :    -0.03
+fiber                    :     7.69
+saturated_fatty_acids    :     0.09
+monounsaturated_fatty_acids:     3.94
+polyunsaturated_fatty_acids:     2.07
+fatty_acids_total_trans  :    91.75
+
+Model 2 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+protein                  :    12.47
+calories                 :   295.35
+calcium                  :    58.23
+total_fat                :    16.23
+saturated_fat            :     2.29
+cholesterol              :    43.03
+sodium                   :  3086.53
+carbohydrate             :    23.81
+fiber                    :     2.99
+saturated_fatty_acids    :     2.36
+monounsaturated_fatty_acids:     9.60
+polyunsaturated_fatty_acids:     4.97
+fatty_acids_total_trans  :    39.75
+
+================================================================================
+FINAL MODEL COMPARISON SUMMARY
+================================================================================
+
+Model 1 (Text + Numeric -> 8 nutrients):
+  Cross-Val Mean R²: 0.7278 ± 0.0448
+  Cross-Val Mean MAE: 7.3768 ± 0.3335
+  Test Set Mean R²: 0.7523
+
+Model 2 (Text Only -> 13 nutrients):
+  Cross-Val Mean R²: 0.4137 ± 0.0247
+  Cross-Val Mean MAE: 31.5140 ± 0.4974
+  Test Set Mean R²: 0.4063
+
+Recommendations:
+- Model 1 (Text + Numeric) shows better performance
+- Consider using known nutritional values as inputs when available
+
+Cross-validation provides more reliable estimates than single train/test splits
+Standard deviation indicates model stability across different data splits
+
+
+###########################################################################################
+##############  Multioutput Regression + Bayesian Impute ( DUMPED X )   ################### 
+###########################################################################################
+
+
+Model 1: Text + Numeric Features -> Subset of Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.75480917 0.73825106 0.82487487 0.70278092 0.76653699]
+Mean R² Score: 0.7575 (+/- 0.0800)
+Cross-Validation MAE Scores: [7.61959633 7.62478227 7.18851281 6.94778074 7.21631636]
+Mean MAE Score: 7.3194 (+/- 0.5286)
+
+Model 2: Text Features Only -> All Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.45494483 0.50646165 0.54834445 0.4786114  0.52422731]
+Mean R² Score: 0.5025 (+/- 0.0659)
+Cross-Validation MAE Scores: [29.99512946 28.44478821 27.62642504 29.82310106 28.98615562]
+Mean MAE Score: 28.9751 (+/- 1.7572)
+
+================================================================================
+DETAILED EVALUATION ON HOLDOUT TEST SET
+================================================================================
+
+Training Model 1 on full training set...
+
+Model 1 - Individual Target Performance:
+------------------------------------------------------------
+calories                  | MAE:    7.63 | MSE:     179.32 | R²:  0.994
+calcium                   | MAE:   47.11 | MSE:   31200.91 | R²:  0.251
+saturated_fat             | MAE:    0.76 | MSE:       5.66 | R²:  0.860
+fiber                     | MAE:    1.00 | MSE:       5.51 | R²:  0.611
+saturated_fatty_acids     | MAE:    0.76 | MSE:       5.64 | R²:  0.860
+monounsaturated_fatty_acids | MAE:    0.94 | MSE:       7.37 | R²:  0.843
+polyunsaturated_fatty_acids | MAE:    0.83 | MSE:       5.29 | R²:  0.729
+fatty_acids_total_trans   | MAE:    2.57 | MSE:    2041.88 | R²:  0.904
+
+Training Model 2 on full training set...
+
+Model 2 - Individual Target Performance:
+------------------------------------------------------------
+protein                   | MAE:    3.07 | MSE:      24.26 | R²:  0.767
+calories                  | MAE:   58.43 | MSE:    8040.67 | R²:  0.709
+calcium                   | MAE:   53.19 | MSE:   33244.09 | R²:  0.202
+total_fat                 | MAE:    5.41 | MSE:      91.53 | R²:  0.609
+saturated_fat             | MAE:    2.05 | MSE:      19.32 | R²:  0.522
+cholesterol               | MAE:   23.13 | MSE:   14789.12 | R²:  0.305
+sodium                    | MAE:  199.36 | MSE:  881960.20 | R²: -0.272
+carbohydrate              | MAE:    7.09 | MSE:     144.13 | R²:  0.810
+fiber                     | MAE:    1.28 | MSE:       7.02 | R²:  0.504
+saturated_fatty_acids     | MAE:    2.04 | MSE:      19.27 | R²:  0.522
+monounsaturated_fatty_acids | MAE:    2.43 | MSE:      22.79 | R²:  0.514
+polyunsaturated_fatty_acids | MAE:    1.40 | MSE:      10.84 | R²:  0.444
+fatty_acids_total_trans   | MAE:   23.13 | MSE:   14789.12 | R²:  0.305
+
+================================================================================
+EXAMPLE PREDICTIONS
+================================================================================
+
+Making predictions for new food...
+
+Model 1 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+calories                 :   389.36
+calcium                  :    70.46
+saturated_fat            :    -0.12
+fiber                    :     9.45
+saturated_fatty_acids    :    -0.30
+monounsaturated_fatty_acids:     3.19
+polyunsaturated_fatty_acids:     1.04
+fatty_acids_total_trans  :   100.46
+
+Model 2 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+protein                  :    12.47
+calories                 :   296.65
+calcium                  :    34.71
+total_fat                :    18.89
+saturated_fat            :     2.91
+cholesterol              :    61.56
+sodium                   :  1075.86
+carbohydrate             :     5.06
+fiber                    :     2.75
+saturated_fatty_acids    :     2.77
+monounsaturated_fatty_acids:     8.44
+polyunsaturated_fatty_acids:     4.62
+fatty_acids_total_trans  :    61.56
+
+================================================================================
+FINAL MODEL COMPARISON SUMMARY
+================================================================================
+
+Model 1 (Text + Numeric -> 8 nutrients):
+  Cross-Val Mean R²: 0.7575 ± 0.0400
+  Cross-Val Mean MAE: 7.3194 ± 0.2643
+  Test Set Mean R²: 0.7563
+
+Model 2 (Text Only -> 13 nutrients):
+  Cross-Val Mean R²: 0.5025 ± 0.0329
+  Cross-Val Mean MAE: 28.9751 ± 0.8786
+  Test Set Mean R²: 0.4571
+
+Recommendations:
+- Model 1 (Text + Numeric) shows better performance
+- Consider using known nutritional values as inputs when available
+
+Cross-validation provides more reliable estimates than single train/test splits
+Standard deviation indicates model stability across different data splits
+
+
+###########################################################################################
+################### Chain Regression + XGBoost Ensemble Impute ############################
+###########################################################################################
+
+
+
+================================================================================
+CROSS-VALIDATION RESULTS
+================================================================================
+
+Model 1: Text + Numeric Features -> Subset of Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.73664973 0.73522852 0.81745949 0.71502452 0.753898  ]
+Mean R² Score: 0.7517 (+/- 0.0703)
+Cross-Validation MAE Scores: [7.94198549 7.53263342 7.26795369 6.73007262 7.3360487 ]
+Mean MAE Score: 7.3617 (+/- 0.7871)
+
+Model 2: Text Features Only -> All Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.42741153 0.43373701 0.49193482 0.45384668 0.44596249]
+Mean R² Score: 0.4506 (+/- 0.0453)
+Cross-Validation MAE Scores: [30.49620865 30.58202413 29.27219811 31.12880705 30.88623616]
+Mean MAE Score: 30.4731 (+/- 1.2822)
+
+================================================================================
+DETAILED EVALUATION ON HOLDOUT TEST SET
+================================================================================
+
+Training Model 1 on full training set...
+
+Model 1 - Individual Target Performance:
+------------------------------------------------------------
+calories                  | MAE:    8.03 | MSE:     191.12 | R²:  0.993
+calcium                   | MAE:   47.59 | MSE:   35188.80 | R²:  0.155
+saturated_fat             | MAE:    0.83 | MSE:       7.80 | R²:  0.824
+fiber                     | MAE:    1.06 | MSE:       5.77 | R²:  0.593
+saturated_fatty_acids     | MAE:    0.76 | MSE:       5.14 | R²:  0.873
+monounsaturated_fatty_acids | MAE:    0.96 | MSE:       8.56 | R²:  0.817
+polyunsaturated_fatty_acids | MAE:    0.83 | MSE:       5.85 | R²:  0.700
+fatty_acids_total_trans   | MAE:    3.24 | MSE:    1821.87 | R²:  0.914
+
+Training Model 2 on full training set...
+
+Model 2 - Individual Target Performance:
+------------------------------------------------------------
+protein                   | MAE:    3.09 | MSE:      25.04 | R²:  0.760
+calories                  | MAE:   65.70 | MSE:    9967.17 | R²:  0.640
+calcium                   | MAE:   56.29 | MSE:   35406.41 | R²:  0.150
+total_fat                 | MAE:    5.98 | MSE:     116.35 | R²:  0.504
+saturated_fat             | MAE:    2.21 | MSE:      28.87 | R²:  0.351
+cholesterol               | MAE:   22.71 | MSE:   14885.87 | R²:  0.300
+sodium                    | MAE:  199.43 | MSE:  535857.27 | R²:  0.227
+carbohydrate              | MAE:    8.54 | MSE:     192.00 | R²:  0.748
+fiber                     | MAE:    1.35 | MSE:       7.43 | R²:  0.476
+saturated_fatty_acids     | MAE:    2.17 | MSE:      25.87 | R²:  0.359
+monounsaturated_fatty_acids | MAE:    2.64 | MSE:      27.93 | R²:  0.404
+polyunsaturated_fatty_acids | MAE:    1.55 | MSE:      12.91 | R²:  0.338
+fatty_acids_total_trans   | MAE:   22.38 | MSE:   15168.68 | R²:  0.287
+
+================================================================================
+EXAMPLE PREDICTIONS
+================================================================================
+
+Making predictions for new food...
+
+Model 1 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+calories                 :   396.74
+calcium                  :    70.23
+saturated_fat            :    -0.77
+fiber                    :     7.60
+saturated_fatty_acids    :     0.24
+monounsaturated_fatty_acids:     3.56
+polyunsaturated_fatty_acids:     1.64
+fatty_acids_total_trans  :    94.30
+
+Model 2 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+protein                  :    14.67
+calories                 :   289.37
+calcium                  :    54.69
+total_fat                :    19.90
+saturated_fat            :     3.97
+cholesterol              :    63.31
+sodium                   :  3309.25
+carbohydrate             :     7.92
+fiber                    :     3.14
+saturated_fatty_acids    :     3.96
+monounsaturated_fatty_acids:     9.98
+polyunsaturated_fatty_acids:     4.29
+fatty_acids_total_trans  :    61.37
+
+================================================================================
+FINAL MODEL COMPARISON SUMMARY
+================================================================================
+
+Model 1 (Text + Numeric -> 8 nutrients):
+  Cross-Val Mean R²: 0.7517 ± 0.0351
+  Cross-Val Mean MAE: 7.3617 ± 0.3935
+  Test Set Mean R²: 0.7337
+
+Model 2 (Text Only -> 13 nutrients):
+  Cross-Val Mean R²: 0.4506 ± 0.0226
+  Cross-Val Mean MAE: 30.4731 ± 0.6411
+  Test Set Mean R²: 0.4263
+
+Recommendations:
+- Model 1 (Text + Numeric) shows better performance
+- Consider using known nutritional values as inputs when available
+
+Cross-validation provides more reliable estimates than single train/test splits
+Standard deviation indicates model stability across different data splits
+
+
+
+###########################################################################################
+################### Multioutput Regression + XGBoost Ensemble Impute ######################
+###########################################################################################
+
+
+================================================================================
+CROSS-VALIDATION RESULTS
+================================================================================
+
+Model 1: Text + Numeric Features -> Subset of Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.73923846 0.74911981 0.82339386 0.71600581 0.76698255]
+Mean R² Score: 0.7589 (+/- 0.0724)
+Cross-Validation MAE Scores: [7.97548203 7.6951154  7.32844123 6.93921764 7.35964876]
+Mean MAE Score: 7.4596 (+/- 0.7040)
+
+Model 2: Text Features Only -> All Nutrients
+------------------------------------------------------------
+Performing cross-validation...
+Cross-Validation R² Scores: [0.48557394 0.50509214 0.54120745 0.48551499 0.52214528]
+Mean R² Score: 0.5079 (+/- 0.0431)
+Cross-Validation MAE Scores: [28.51572229 27.9656173  27.4467615  29.39148778 28.24936909]
+Mean MAE Score: 28.3138 (+/- 1.2898)
+
+================================================================================
+DETAILED EVALUATION ON HOLDOUT TEST SET
+================================================================================
+
+Training Model 1 on full training set...
+
+Model 1 - Individual Target Performance:
+------------------------------------------------------------
+calories                  | MAE:    8.03 | MSE:     191.12 | R²:  0.993
+calcium                   | MAE:   47.88 | MSE:   32775.44 | R²:  0.213
+saturated_fat             | MAE:    0.81 | MSE:       8.52 | R²:  0.808
+fiber                     | MAE:    1.02 | MSE:       5.57 | R²:  0.607
+saturated_fatty_acids     | MAE:    0.77 | MSE:       5.62 | R²:  0.861
+monounsaturated_fatty_acids | MAE:    0.94 | MSE:       7.61 | R²:  0.838
+polyunsaturated_fatty_acids | MAE:    0.82 | MSE:       5.26 | R²:  0.730
+fatty_acids_total_trans   | MAE:    3.88 | MSE:    3068.86 | R²:  0.856
+
+Training Model 2 on full training set...
+
+Model 2 - Individual Target Performance:
+------------------------------------------------------------
+protein                   | MAE:    3.09 | MSE:      25.04 | R²:  0.760
+calories                  | MAE:   57.91 | MSE:    7946.89 | R²:  0.713
+calcium                   | MAE:   53.92 | MSE:   34503.59 | R²:  0.172
+total_fat                 | MAE:    5.39 | MSE:      93.82 | R²:  0.600
+saturated_fat             | MAE:    2.14 | MSE:      21.23 | R²:  0.523
+cholesterol               | MAE:   23.32 | MSE:   14889.46 | R²:  0.300
+sodium                    | MAE:  185.28 | MSE:  529706.50 | R²:  0.236
+carbohydrate              | MAE:    7.18 | MSE:     149.99 | R²:  0.803
+fiber                     | MAE:    1.30 | MSE:       7.37 | R²:  0.480
+saturated_fatty_acids     | MAE:    2.06 | MSE:      19.08 | R²:  0.527
+monounsaturated_fatty_acids | MAE:    2.47 | MSE:      23.78 | R²:  0.493
+polyunsaturated_fatty_acids | MAE:    1.37 | MSE:      10.31 | R²:  0.471
+fatty_acids_total_trans   | MAE:   23.32 | MSE:   14889.46 | R²:  0.300
+
+================================================================================
+EXAMPLE PREDICTIONS
+================================================================================
+
+Making predictions for new food...
+
+Model 1 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+calories                 :   396.74
+calcium                  :    72.36
+saturated_fat            :    -0.05
+fiber                    :     8.69
+saturated_fatty_acids    :     0.13
+monounsaturated_fatty_acids:     3.54
+polyunsaturated_fatty_acids:     1.92
+fatty_acids_total_trans  :    96.25
+
+Model 2 Predictions for 'Chicken Salad, Salted':
+--------------------------------------------------
+protein                  :    14.67
+calories                 :   309.36
+calcium                  :    35.95
+total_fat                :    18.45
+saturated_fat            :     2.59
+cholesterol              :    45.96
+sodium                   :   590.54
+carbohydrate             :     7.72
+fiber                    :     3.74
+saturated_fatty_acids    :     2.24
+monounsaturated_fatty_acids:     8.70
+polyunsaturated_fatty_acids:     5.04
+fatty_acids_total_trans  :    45.96
+
+================================================================================
+FINAL MODEL COMPARISON SUMMARY
+================================================================================
+
+Model 1 (Text + Numeric -> 8 nutrients):
+  Cross-Val Mean R²: 0.7589 ± 0.0362
+  Cross-Val Mean MAE: 7.4596 ± 0.3520
+  Test Set Mean R²: 0.7382
+
+Model 2 (Text Only -> 13 nutrients):
+  Cross-Val Mean R²: 0.5079 ± 0.0215
+  Cross-Val Mean MAE: 28.3138 ± 0.6449
+  Test Set Mean R²: 0.4905
+
+Recommendations:
+- Model 1 (Text + Numeric) shows better performance
+- Consider using known nutritional values as inputs when available
