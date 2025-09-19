@@ -2,7 +2,6 @@ hdbscan==0.8.40
 joblib==1.5.2
 matplotlib==3.10.6
 numpy==2.3.3
-ollama==0.5.3
 pandas==2.3.2
 plotly==6.3.0
 scikit_learn==1.7.2
