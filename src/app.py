@@ -63,19 +63,62 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.Div([
-                html.H5("Food 1"),
-                dbc.Input(id='search-1', placeholder="Search food...", 
-                         value="Beef", className="mb-2"),
-                dcc.Dropdown(id='dropdown-1', placeholder="Select from results...")
-            ], id='search-section-1')
+                html.H5("Food 1", style={'color': '#00ffaf'}),
+                dbc.Input(
+                    id='search-1', 
+                    placeholder="Search food...", 
+                    value="Beef", 
+                    className="mb-2",
+                    style={
+                        'backgroundColor': '#3A4249',
+                        'color': '#00ffaf',
+                        'borderColor': '#00ffaf',
+                        'borderWidth': '1px'
+                    }
+                ),
+                dcc.Dropdown(
+                    id='dropdown-1', 
+                    placeholder="Select from results...",
+                    style={
+                        'backgroundColor': '#3A4249',
+                        'color': '#00ffaf',
+                        'borderColor': '#00ffaf',
+                        'borderWidth': '1px'
+                    }
+                )
+            ], id='search-section-1', style={'backgroundColor': '#3A4249', 'padding': '15px', 'borderRadius': '5px'})
         ], width=6),
         dbc.Col([
             html.Div([
-                html.H5("Food 2"),
-                dbc.Input(id='search-2', placeholder="Search food...", 
-                         value="Chicken", className="mb-2"),
-                dcc.Dropdown(id='dropdown-2', placeholder="Select from results...")
-            ], id='search-section-2', style={'display': 'none'})
+                html.H5("Food 2", style={'color': '#00ffaf'}),
+                dbc.Input(
+                    id='search-2', 
+                    placeholder="Search food...", 
+                    value="Chicken", 
+                    className="mb-2",
+                    style={
+                        'backgroundColor': '#3A4249',
+                        'color': '#00ffaf',
+                        'borderColor': '#00ffaf',
+                        'borderWidth': '1px'
+                    }
+                ),
+                dcc.Dropdown(
+                    id='dropdown-2', 
+                    placeholder="Select from results...",
+                    style={
+                        'backgroundColor': '#3A4249',
+                        'color': '#00ffaf',
+                        'borderColor': '#00ffaf',
+                        'borderWidth': '1px'
+                    }
+                )
+            ], id='search-section-2', style={
+                'display': 'none', 
+                'backgroundColor': '#3A4249', 
+                'padding': '15px', 
+                'borderRadius': '5px'
+            })
         ], width=6)
     ], className="mb-3"),
     
@@ -96,7 +139,7 @@ app.layout = dbc.Container([
             )
         ], width=6)
     ], className="mb-3"),
-    
+
     dbc.Row([
         dbc.Col([
             dbc.Button("Submit", id="submit-btn", color="primary", className="mb-3")
