@@ -1,0 +1,231 @@
+/* === Dark Dropdown Styling with Rounded Corners === */
+
+/* === Dark Dropdown Styling with Rounded Corners + Neon Glow === */
+
+/* Dropdown main box (closed state) */
+.dash-dropdown {
+  background-color: #3A4249 !important;
+  color: #00ffaf !important;
+  border: 1px solid #00ffaf !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 10px rgba(0, 255, 175, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Hover glow */
+.dash-dropdown:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 175, 0.35);
+}
+
+/* Dropdown control (clickable area) */
+.dash-dropdown .Select__control,
+.dash-dropdown .Select-control {
+  background-color: #3A4249 !important;
+  border: 1px solid #00ffaf !important;
+  border-radius: 8px !important;
+  color: #00ffaf !important;
+  box-shadow: 0 0 10px rgba(0, 255, 175, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Focus state (active dropdown glow) */
+.dash-dropdown .Select__control--is-focused,
+.dash-dropdown .Select-control.is-focused {
+  border-color: #00ffaf !important;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.5) !important;
+}
+
+/* Dropdown menu (the open list) */
+.dash-dropdown .Select__menu,
+.dash-dropdown .Select__menu-list,
+.dash-dropdown .Select-menu,
+.dash-dropdown .Select-menu-outer {
+  background-color: #3A4249 !important;
+  color: #00ffaf !important;
+  border: 1px solid #00ffaf !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.25);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Each option item */
+.dash-dropdown .Select__option,
+.dash-dropdown .Select-option {
+  background-color: #3A4249 !important;
+  color: #00ffaf !important;
+  border-radius: 0 !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hovered option */
+.dash-dropdown .Select__option--is-focused,
+.dash-dropdown .Select-option.is-focused {
+  background-color: #00ffaf !important;
+  color: #3A4249 !important;
+  text-shadow: 0 0 8px rgba(0, 255, 175, 0.6);
+}
+
+/* Selected text inside the box */
+.dash-dropdown .Select__single-value,
+.dash-dropdown .Select-value-label {
+  color: #00ffaf !important;
+}
+
+/* Placeholder text */
+.dash-dropdown .Select__placeholder,
+.dash-dropdown .Select-placeholder {
+  color: #00ffaf !important;
+  opacity: 0.7;
+}
+
+/* Focus outline when active */
+.dash-dropdown .Select__control--is-focused {
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.4) !important;
+  border-color: #00ffaf !important;
+}
+
+/* Smooth hover transitions */
+.dash-dropdown *,
+.dash-dropdown .Select__control,
+.dash-dropdown .Select__menu {
+  transition: all 0.25s ease;
+}
+
+
+/* Plotly figure container styling */
+#main-plot {
+  border-radius: 16px;
+  overflow: hidden; /* keeps corners clean */
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.15);
+  background-color: rgba(42, 50, 56, 0.9);
+  padding: 6px;
+}
+
+/* Make legend blend better with dark theme */
+.js-plotly-plot .legend {
+  border: none !important;
+  background: transparent !important;
+  border-radius: 12px !important;
+}
+
+/* Results table and text styling */
+#results-table {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #0a0a0a;
+}
+
+/* Optional hover effect */
+#main-plot:hover {
+  box-shadow: 0 0 25px rgb(0, 255, 174);
+  transition: box-shadow 0.7s ease;
+}
+
+
+/* === Results Section (Matching Neon Theme) === */
+
+/* Results container styling */
+.results-container {
+    color: #00ffaf;
+    padding: 20px;
+    border-radius: 8px;
+    background: rgba(42, 50, 56, 0.8);
+}
+
+/* Neon title styling */
+.neon-title {
+    color: #00ffaf;
+    font-weight: thin;
+    text-shadow: 0 0 2px #00ffaf, 0 0 10px #00ffaf;
+    animation: glow 2s ease-in-out infinite alternate;
+    margin-bottom: 8px;
+}
+
+/* Neon subtitle styling */
+.neon-subtitle {
+    color: #00ffaf;
+    animation: pulse 3s ease-in-out infinite;
+    margin-bottom: 10px;
+    text-shadow: 0 0 2px #00ffaf, 0 0 10px #00ffaf;
+}
+
+/* Animations */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 2px #00ffaf, 0 0 10px #00ffaf;
+    }
+    to {
+        text-shadow: 0 0 5px #00ffaf, 0 0 15px #00ffaf, 0 0 20px #00ff9d;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.results-container:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 175, 0.3);
+}
+
+/* Title & Subtitle */
+.results-title {
+  color: #00ffaf !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 255, 175, 0.4);
+  margin-bottom: 8px;
+}
+
+.results-subtitle {
+  color: #00ffaf !important;
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+
+/* Table styling */
+.results-table {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fbff000c;
+  color: #575757 !important;
+  box-shadow: 0 0 15px rgba(0, 255, 175, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Table hover glow */
+.results-table:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.25);
+}
+
+/* Table headers and rows */
+.results-table thead {
+  background-color: #3A4249;
+  color: #00ffaf;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.results-table tbody tr {
+  background-color: #0a0a0a;
+  border-bottom: 1px solid rgba(0, 255, 175, 0.2);
+}
+
+.results-table tbody tr:hover {
+  background-color: rgba(0, 255, 175, 0.1);
+  color: #00ffaf;
+  transition: background-color 0.2s ease;
+}
+
+/* Table borders cleanup */
+.results-table td,
+.results-table th {
+  border: none !important;
+}
+
+

@@ -8,16 +8,15 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
 from dash import html
-import cupy
+
 # Color Configuration
 COLORS = {
     'background': {
-        'plot': 'rgb(58, 66, 73)',
+        'plot': 'rgb(42, 50, 56)', # for 2d plot bg
         'paper': 'rgba(58, 66, 73, 0.1)',
-        'scene': 'rgb(58, 66, 73)',
-        'axis': 'rgb(58, 66, 73)',
-        'legend': 'rgb(58, 66, 73)',
-        'table': '#0a0a0a'
+        'scene': 'rgb(42, 50, 56)', # for 3d plot bg
+        'axis': 'rgb(42, 50, 56)',
+        'legend': 'rgb(58, 66, 73)'
     },
     'primary': {
         'main': '#00ffaf',
@@ -169,16 +168,14 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
         margin=dict(l=50, r=50, t=60, b=50),
         showlegend=True,
         legend=dict(
-            bgcolor=COLORS['background']['legend'],
-            bordercolor=COLORS['primary']['main'],
-            borderwidth=2,
+            bgcolor='rgba(58, 66, 73, 0.0)',  # transparent, CSS handles style
+            borderwidth=0,
             font=dict(color=COLORS['primary']['main']),
             x=1.02,
             y=1,
             xanchor='left',
             yanchor='top'
         ),
-        
         xaxis=dict(
             showline=True,
             linewidth=2,
@@ -206,24 +203,6 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
             font=dict(size=16, color=COLORS['primary']['main']),
             pad=dict(t=10, b=20)
         ),
-        shapes=[
-            dict(
-                type="rect",
-                xref="paper",
-                yref="paper",
-                x0=0,
-                y0=0,
-                x1=1,
-                y1=1,
-                line=dict(width=2, color=COLORS['primary']['main']),
-                fillcolor="rgba(0,0,0,0)",
-                opacity=1,
-                layer="below",
-                line_width=2,
-                line_color=COLORS['primary']['main'],
-                line_dash="solid",
-            )
-        ]
     )
     
     if plot_type == '3d':
@@ -267,7 +246,7 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
                     'showactive': False,
                     'buttons': [
                         {
-                            'label': '🔄 Rotate',
+                            'label': 'Rotate',
                             'method': 'animate',
                             'args': [
                                 None, 
@@ -280,7 +259,7 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
                             ]
                         },
                         {
-                            'label': '⏸️ Pause',
+                            'label': 'Pause',
                             'method': 'animate',
                             'args': [
                                 [None],
@@ -292,7 +271,7 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
                             ]
                         },
                         {
-                            'label': '⏹️ Reset',
+                            'label': 'Reset',
                             'method': 'relayout',
                             'args': [
                                 {
@@ -454,18 +433,24 @@ def create_single_plot(df: pd.DataFrame, plot_type: str, selection: str,
     table_data = neighbors[['enhanced_name', 'distance']].reset_index(drop=True)
     table = dbc.Table.from_dataframe(
         table_data.rename(columns={'enhanced_name': 'Food Name', 'distance': 'Distance'}),
-        striped=True, bordered=True, hover=True,
-        className="mt-3",
-        style={'color': COLORS['primary']['main'], 'backgroundColor': COLORS['background']['table']}
+        striped=True,
+        bordered=False,
+        hover=True,
+        className="results-table mt-3"
     )
-    
+
     results = html.Div([
-        html.H5(f"Top {NEAREST_NEIGHBORS} foods similar to: {selected_name}", 
-                className="text-light", style={'color': COLORS['primary']['main']}),
-        html.P(f"Cluster: {cluster_id}", className="text-muted", style={'color': COLORS['primary']['main']}),
+        html.H5(
+            f"Top {NEAREST_NEIGHBORS} foods similar to: {selected_name}",
+            className="neon-title"  # Use CSS class
+        ),
+        html.P(
+            f"Cluster: {cluster_id}",
+            className="neon-subtitle"  # Use CSS class
+        ),
         table
-    ], className="mt-4")
-    
+    ], className="results-container mt-4")  # Container class handles the background/padding
+
     return fig, results
 
 
@@ -556,32 +541,38 @@ def create_comparison_plot(df: pd.DataFrame, plot_type: str, selection_1: str, s
     table_1 = dbc.Table.from_dataframe(
         neighbors_1[['enhanced_name', 'distance_1']].reset_index(drop=True)
         .rename(columns={'enhanced_name': 'Food Name', 'distance_1': 'Distance'}),
-        striped=True, bordered=True, hover=True, size='sm',
-        className="mt-2",
-        style={'color': COLORS['primary']['main'], 'backgroundColor': COLORS['background']['table']}
+        striped=True, bordered=False, hover=True, size='sm',
+        className="results-table mt-2"
     )
-    
+
     table_2 = dbc.Table.from_dataframe(
         neighbors_2[['enhanced_name', 'distance_2']].reset_index(drop=True)
         .rename(columns={'enhanced_name': 'Food Name', 'distance_2': 'Distance'}),
-        striped=True, bordered=True, hover=True, size='sm',
-        className="mt-2",
-        style={'color': COLORS['primary']['main'], 'backgroundColor': COLORS['background']['table']}
+        striped=True, bordered=False, hover=True, size='sm',
+        className="results-table mt-2"
     )
-    
+
     results = dbc.Row([
         dbc.Col([
-            html.H5(f"Similar to: {selected_name_1}", className="text-light", 
-                    style={'color': COLORS['primary']['main']}),
-            html.P(f"Cluster: {cluster_1}", className="text-muted", 
-                   style={'color': COLORS['primary']['main']}),
+            html.H5(
+                f"Similar to: {selected_name_1}",
+                className="neon-title"  # Use CSS class instead of inline styles
+            ),
+            html.P(
+                f"Cluster: {cluster_1}",
+                className="neon-subtitle"  # Use CSS class instead of inline styles
+            ),
             table_1
         ], width=6),
         dbc.Col([
-            html.H5(f"Similar to: {selected_name_2}", className="text-light", 
-                    style={'color': COLORS['primary']['main']}),
-            html.P(f"Cluster: {cluster_2}", className="text-muted", 
-                   style={'color': COLORS['primary']['main']}),
+            html.H5(
+                f"Similar to: {selected_name_2}",
+                className="neon-title"  # Use CSS class instead of inline styles
+            ),
+            html.P(
+                f"Cluster: {cluster_2}",
+                className="neon-subtitle"  # Use CSS class instead of inline styles
+            ),
             table_2
         ], width=6)
     ], className="mt-4")
