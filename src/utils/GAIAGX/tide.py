@@ -3,7 +3,6 @@ import requests
 from datetime import date
 
 def fetch_tide_stations(max_stations=None, start=None, end=None):
-    """Fetch tide predictions for all available stations."""
     stations_url = "https://surftruths.com/api/tide/stations.json"
     try:
         stations = requests.get(stations_url, timeout=10).json()
@@ -27,8 +26,7 @@ def fetch_tide_stations(max_stations=None, start=None, end=None):
             data = requests.get(pred_url, timeout=10).json()
             if not data:
                 continue
-
-            # Sort by time, get next 2 tides
+ 
             data.sort(key=lambda x: x["time"])
             upcoming = data[:2]
             info_text = "<br>".join(

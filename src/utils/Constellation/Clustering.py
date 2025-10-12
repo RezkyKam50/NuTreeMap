@@ -9,8 +9,7 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
 from dash import html
-
-# Color Configuration
+ 
 COLORS = {
     'background': {
         'plot': 'rgb(42, 50, 56)', # for 2d plot bg
@@ -38,10 +37,9 @@ COLORS = {
 }
 
 def create_cluster_barplot(df: pd.DataFrame, color_mapping: Dict[str, str]) -> go.Figure:
-    """Create a bar plot showing cluster counts"""
+ 
     cluster_counts = df['cluster'].value_counts().sort_values(ascending=True)
-    
-    # Prepare data for bar plot
+ 
     clusters = cluster_counts.index.astype(str).tolist()
     counts = cluster_counts.values.tolist()
     colors = [color_mapping.get(str(c), COLORS['primary']['main']) for c in cluster_counts.index]
@@ -99,8 +97,7 @@ def create_cluster_barplot(df: pd.DataFrame, color_mapping: Dict[str, str]) -> g
     
     return fig
 
-
-# Add callback for initial load
+ 
 @callback(
     [Output('main-plot', 'figure'),
      Output('cluster-barplot', 'figure'),
@@ -110,10 +107,8 @@ def create_cluster_barplot(df: pd.DataFrame, color_mapping: Dict[str, str]) -> g
      State('show-outliers', 'value')],
 )
 def initialize_plot(plot_id: str, plot_type: Optional[str], show_outliers: Optional[List[str]]) -> Tuple[go.Figure, go.Figure, html.Div]:
-    """Initialize the plot on dashboard launch with 3D view"""
     from app import plot_df_3d
-    
-    # Default to 3D plot
+ 
     if not plot_type:
         plot_type = '3d'
     

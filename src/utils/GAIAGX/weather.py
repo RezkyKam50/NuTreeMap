@@ -9,9 +9,6 @@ retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
 openmeteo = openmeteo_requests.Client(session=retry_session)
 
 def fetch_weather_data(latitude: float, longitude: float) -> Dict:
-    """
-    Fetch current weather data from Open-Meteo API
-    """
     try:
         url = "https://api.open-meteo.com/v1/forecast"
         params = {

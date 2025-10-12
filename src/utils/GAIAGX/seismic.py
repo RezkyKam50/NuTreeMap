@@ -8,8 +8,7 @@ from collections import deque
 
 echo_uri = 'wss://www.seismicportal.eu/standing_order/websocket'
 PING_INTERVAL = 10
-
-# Shared memory to store recent events (max 1000)
+ 
 recent_events = deque(maxlen=1000)
 
 @gen.coroutine

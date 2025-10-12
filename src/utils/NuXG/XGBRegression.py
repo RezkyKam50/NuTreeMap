@@ -79,8 +79,7 @@ def predict_nutrients(n_clicks: int, food_name: str, protein: float, fat: float,
                                         striped=True, bordered=True, hover=True, size='sm')
             ])
         
-        # Return both the content and a unique key based on n_clicks to force re-render
         return html.Div(output, className="prediction-animate"), str(n_clicks)
         
     except Exception as e:
-        return dbc.Alert(f"❌ Error: {str(e)}", color="danger"), str(n_clicks)
+        return dbc.Alert(f"Error: {str(e)}", color="danger"), str(n_clicks)

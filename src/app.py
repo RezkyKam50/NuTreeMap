@@ -11,7 +11,6 @@ from dash import (
     clientside_callback,
     ctx
 )
-import dash
 from utils.config.config import (
     PLOT_HEIGHT, 
     NEAREST_NEIGHBORS, 
@@ -19,20 +18,15 @@ from utils.config.config import (
 )
 from utils.Init import Init
 import dash_bootstrap_components as dbc
-import plotly.express as px
-import pandas as pd
-import numpy as np
-from typing import Dict, List, Tuple, Optional, Any
 
-# Initialize data
+from datetime import datetime, timedelta
+
 plot_df_3d, plot_df_2d, loaded_models, all_names, all_food_types_1, all_food_types_2 = Init()
-
-# Initialize Dash app
+ 
 app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY], assets_folder='assets')
+
+
 app.title = "NuTreeMap"
-
-
-# Layout
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
@@ -60,7 +54,7 @@ app.layout = dbc.Container([
         ])
     ]),
     
-    # NuMAP Section - Combined Search and Visualization
+    # NuMAP Section 
     dbc.Row([
         dbc.Col([
             dbc.Card([
@@ -186,10 +180,10 @@ app.layout = dbc.Container([
         ])
     ], className="mb-4"),
 
-    # Separator before Globe Section
+ 
     html.Hr(style={'borderColor': '#00ffaf', 'marginTop': '40px', 'marginBottom': '20px'}),
     
-    # Globe Section - Now Separated
+    # Globe Section 
     dbc.Row([
         dbc.Col([
             html.H2("GAIA-GX", style={'color': '#00ffaf', 'marginBottom': '20px'})
@@ -200,7 +194,7 @@ app.layout = dbc.Container([
         dbc.Col([
             dbc.Card([
                 dbc.CardBody([
-                    # Add cosmic background elements
+ 
                     html.Div(className="cosmic-dust"),
                     html.Div(className="galaxy-bg"),
                     
@@ -267,8 +261,7 @@ app.layout = dbc.Container([
     ], className="mb-4"),
 
     html.Hr(style={'borderColor': '#00ffaf', 'marginTop': '40px', 'marginBottom': '20px'}),
-
-    # Nutri-XG Predictor - Always Visible
+ 
     dbc.Row([
         dbc.Col([
             html.H2("Nu-XG", style={'color': '#00ffaf', 'marginBottom': '20px'}, className="nutrixg-title")
@@ -402,15 +395,12 @@ app.layout = dbc.Container([
     ], className="mb-4")
 ], fluid=True)
 
-
-
-# Import callbacks after app is defined
+ 
 from utils.Constellation.SearchBlock import update_dropdown, update_search_sections, create_search_section
 from utils.Constellation.Clustering import update_plot
 from utils.NuXG.XGBRegression import predict_nutrients
 import utils.GAIAGX.Globe 
-
-# Update dropdown callback to handle dynamic inputs
+ 
 @callback(
     Output({'type': 'search-dropdown', 'index': MATCH}, 'options'),
     Input({'type': 'search-input', 'index': MATCH}, 'value'),

@@ -85,8 +85,7 @@ def update_dropdown(search_value: str) -> List[Dict[str, str]]:
     return options[:MAX_SUGGESTIONS]
 
 
-
-# Callbacks for dynamic search sections
+ 
 @callback(
     Output('search-sections-container', 'children'),
     Output('food-controls', 'style'),
