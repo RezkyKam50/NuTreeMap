@@ -1,9 +1,10 @@
-from dash import Input, Output, State, callback
+from dash import Input, Output, State, callback, MATCH, ALL
 from utils.config.config import PLOT_HEIGHT, NEAREST_NEIGHBORS
 from utils.Cmap import get_color_mapping
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
@@ -13,40 +14,102 @@ from dash import html
 COLORS = {
     'background': {
         'plot': 'rgb(42, 50, 56)', # for 2d plot bg
-        'paper': 'rgba(58, 66, 73, 0.1)',
-        'scene': 'rgb(42, 50, 56)', # for 3d plot bg
-        'axis': 'rgb(42, 50, 56)',
+        'paper': 'rgba(0, 0, 0, 0)',
+        'scene': 'rgba(0, 0, 0, 0)', # for 3d plot bg
+        'axis': 'rgba(0, 0, 0, 0)',
         'legend': 'rgb(58, 66, 73)'
     },
     'primary': {
         'main': '#00ffaf',
         'border': "#FAFFFB",
         'grid': 'rgba(0,255,65,0.1)',
-        'grid_3d': 'rgba(100, 100, 100, 0.1)',
+        'grid_3d': 'rgba(0, 0, 0, 0)',
         'zeroline': 'rgba(0,255,65,0.5)',
-        'highlight': 'rgba(0, 255, 65, 0.15)',
+        'highlight': 'rgba(0, 255, 65, 0.0)',
         'line': 'rgba(0, 255, 65, 0.5)'
     },
     'marker': {
-        'line': 'rgba(0, 255, 175, 0.01)'
+        'line': 'rgba(0, 255, 175, 0.00)'
     },
     'comparison': {
-        'color_1': '#00ffaf',
-        'border_1': '#FFFFFF',
-        'color_2': '#00ffaf',
-        'border_2': '#FFFFFF'
+        'colors': ['#4A90E2', '#50E3C2', '#B8E986', '#F5A623', '#D0021B', '#9013FE', '#F8E71C', '#7ED321'],
+        'borders': ['#2C3E50', '#2C3E50', '#2C3E50', '#2C3E50', '#2C3E50', '#2C3E50', '#2C3E50', '#2C3E50']
     }
 }
+
+def create_cluster_barplot(df: pd.DataFrame, color_mapping: Dict[str, str]) -> go.Figure:
+    """Create a bar plot showing cluster counts"""
+    cluster_counts = df['cluster'].value_counts().sort_values(ascending=True)
+    
+    # Prepare data for bar plot
+    clusters = cluster_counts.index.astype(str).tolist()
+    counts = cluster_counts.values.tolist()
+    colors = [color_mapping.get(str(c), COLORS['primary']['main']) for c in cluster_counts.index]
+    
+    fig = go.Figure(data=[
+        go.Bar(
+            x=counts,
+            y=clusters,
+            orientation='h',
+            marker=dict(
+                color=colors,
+                line=dict(width=1, color=COLORS['primary']['border'])
+            ),
+            text=counts,
+            textposition='outside',
+            textfont=dict(color=COLORS['primary']['main']),
+            hovertemplate='Cluster %{x}<br>Count: %{y}<extra></extra>'
+        )
+    ])
+
+    
+    
+    fig.update_layout(
+        title=dict(
+            text='Cluster Distribution',
+            x=0.5,
+            xanchor='center',
+            font=dict(size=16, color=COLORS['primary']['main'])
+        ),
+        xaxis=dict(
+            title='Cluster',
+            showline=True,
+            linewidth=2,
+            linecolor=COLORS['primary']['main'],
+            mirror=True,
+            gridcolor=COLORS['primary']['grid'],
+            tickfont=dict(color=COLORS['primary']['main']),
+        ),
+        yaxis=dict(
+            title='Count',
+            showline=True,
+            linewidth=2,
+            linecolor=COLORS['primary']['main'],
+            mirror=True,
+            gridcolor=COLORS['primary']['grid'],
+            tickfont=dict(color=COLORS['primary']['main']),
+        ),
+        plot_bgcolor=COLORS['background']['plot'],
+        paper_bgcolor=COLORS['background']['paper'],
+        font=dict(color=COLORS['primary']['main'], family="Arial, sans-serif"),
+        showlegend=False,
+        height=PLOT_HEIGHT,
+        margin=dict(l=50, r=50, t=60, b=50)
+    )
+    
+    return fig
+
 
 # Add callback for initial load
 @callback(
     [Output('main-plot', 'figure'),
+     Output('cluster-barplot', 'figure'),
      Output('results-table', 'children')],
     Input('main-plot', 'id'),  # Triggers on component mount
     [State('plot-type', 'value'),
      State('show-outliers', 'value')],
 )
-def initialize_plot(plot_id: str, plot_type: Optional[str], show_outliers: Optional[List[str]]) -> Tuple[go.Figure, html.Div]:
+def initialize_plot(plot_id: str, plot_type: Optional[str], show_outliers: Optional[List[str]]) -> Tuple[go.Figure, go.Figure, html.Div]:
     """Initialize the plot on dashboard launch with 3D view"""
     from app import plot_df_3d
     
@@ -64,25 +127,26 @@ def initialize_plot(plot_id: str, plot_type: Optional[str], show_outliers: Optio
     
     color_mapping = get_color_mapping(df)
     fig = create_base_plot(df, plot_type, color_mapping)
+    barplot = create_cluster_barplot(df, color_mapping)
     
-    return fig, html.Div()
+    return fig, barplot, html.Div()
 
 
 @callback(
     [Output('main-plot', 'figure', allow_duplicate=True),
+     Output('cluster-barplot', 'figure', allow_duplicate=True),
      Output('results-table', 'children', allow_duplicate=True)],
     Input('submit-btn', 'n_clicks'),
     [State('plot-type', 'value'),
      State('comparison-mode', 'value'),
-     State('dropdown-1', 'value'),
-     State('dropdown-2', 'value'),
+     State({'type': 'search-dropdown', 'index': ALL}, 'value'),
      State('show-cluster-only', 'value'),
      State('show-outliers', 'value')],
     prevent_initial_call=True
 )
 def update_plot(n_clicks: int, plot_type: str, comparison_mode: List[str],
-                selection_1: Optional[str], selection_2: Optional[str],
-                cluster_only: List[str], show_outliers: List[str]) -> Tuple[go.Figure, html.Div]:
+                selections: List[Optional[str]], cluster_only: List[str], 
+                show_outliers: List[str]) -> Tuple[go.Figure, go.Figure, html.Div]:
     
     from app import plot_df_3d, plot_df_2d
     is_comparison = 'compare' in comparison_mode
@@ -98,15 +162,20 @@ def update_plot(n_clicks: int, plot_type: str, comparison_mode: List[str],
     
     color_mapping = get_color_mapping(df)
     
-    if is_comparison and selection_1 and selection_2:
-        return create_comparison_plot(df, plot_type, selection_1, selection_2, 
-                                     show_cluster, color_mapping)
-    elif selection_1:
-        return create_single_plot(df, plot_type, selection_1, show_cluster, color_mapping)
+    # Filter out None selections
+    valid_selections = [s for s in selections if s is not None]
     
-    fig = create_base_plot(df, plot_type, color_mapping)
-    return fig, html.Div()
-
+    if is_comparison and len(valid_selections) >= 2:
+        fig, results = create_comparison_plot(df, plot_type, valid_selections, 
+                                     show_cluster, color_mapping)
+    elif len(valid_selections) >= 1:
+        fig, results = create_single_plot(df, plot_type, valid_selections[0], show_cluster, color_mapping)
+    else:
+        fig = create_base_plot(df, plot_type, color_mapping)
+        results = html.Div()
+    
+    barplot = create_cluster_barplot(df, color_mapping)
+    return fig, barplot, results
 
 def create_enhanced_name(row: pd.Series) -> str:
     parts = [row['name']]
@@ -141,6 +210,7 @@ def get_matching_row(df: pd.DataFrame, value: str, search_type: str) -> pd.DataF
     return matches.head(1) if len(matches) > 0 else pd.DataFrame()
 
 
+
 def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, str]) -> go.Figure:
     df = df.copy()
     df.loc[:, 'cluster_str'] = df['cluster'].astype(str)
@@ -150,13 +220,13 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
                            color='cluster_str', hover_name='enhanced_name',
                            color_discrete_map=color_mapping,
                            title='3DNuMAP')
-        fig.update_traces(marker=dict(size=3, line=dict(width=0.2, color=COLORS['marker']['line'])))
+        fig.update_traces(marker=dict(size=1, line=dict(width=0.2, color=COLORS['marker']['line'])))
     else:
         fig = px.scatter(df, x='UMAP1', y='UMAP2',
                         color='cluster_str', hover_name='enhanced_name',
                         color_discrete_map=color_mapping,
                         title='2DNuMAP')
-        fig.update_traces(marker=dict(size=5, line=dict(width=0.2, color=COLORS['marker']['line'])))
+        fig.update_traces(marker=dict(size=2, line=dict(width=0.2, color=COLORS['marker']['line'])))
     
     # Common layout updates
     fig.update_layout(
@@ -168,9 +238,13 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
         margin=dict(l=50, r=50, t=60, b=50),
         showlegend=True,
         legend=dict(
-            bgcolor='rgba(58, 66, 73, 0.0)',  # transparent, CSS handles style
+            traceorder='reversed',
+            bgcolor='rgba(58, 66, 73, 0.0)',
             borderwidth=0,
-            font=dict(color=COLORS['primary']['main']),
+            font=dict(
+                color=COLORS['primary']['main'],
+                size=22
+                ),
             x=1.02,
             y=1,
             xanchor='left',
@@ -239,7 +313,6 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
                     projection=dict(type='perspective')
                 )
             ),
-            # Move buttons inside the plot frame
             updatemenus=[
                 {
                     'type': 'buttons',
@@ -283,17 +356,16 @@ def create_base_plot(df: pd.DataFrame, plot_type: str, color_mapping: Dict[str, 
                             ]
                         }
                     ],
-                    # Position inside the plot (bottom left corner)
-                    'x': 0.02,  # Left side
-                    'y': 0.02,  # Bottom
+                    'x': 0.02,
+                    'y': 0.02,
                     'xanchor': 'left',
                     'yanchor': 'bottom',
-                    'bgcolor': 'rgba(58, 66, 73, 0.9)',  # Semi-transparent background
+                    'bgcolor': 'rgba(58, 66, 73, 0.9)',
                     'bordercolor': COLORS['primary']['main'],
                     'borderwidth': 1,
                     'font': {'color': COLORS['primary']['main'], 'size': 12},
-                    'direction': 'up',  # Stack buttons vertically
-                    'pad': {'r': 10, 't': 10, 'b': 10}  # Padding
+                    'direction': 'up',
+                    'pad': {'r': 10, 't': 10, 'b': 10}
                 }
             ]
         )
@@ -364,8 +436,8 @@ def create_single_plot(df: pd.DataFrame, plot_type: str, selection: str,
                 mode='markers',
                 marker=dict(
                     size=8, 
-                    color=COLORS['primary']['highlight'],
-                    line=dict(width=0, color=COLORS['primary']['line'])
+                    color='rgba(0, 255, 65, 0.0)',
+                    line=dict(width=1, color=COLORS['primary']['line'])
                 ),
                 hovertext=cluster_df['enhanced_name'],
                 name=f'Cluster {cluster_id}',
@@ -373,14 +445,14 @@ def create_single_plot(df: pd.DataFrame, plot_type: str, selection: str,
                 hoverinfo='text'
             ))
         else:
-            fig.add_trace(go.Scatter(
+            fig.add_trace(go.Scattergl(
                 x=cluster_df['UMAP1'], 
                 y=cluster_df['UMAP2'],
                 mode='markers',
                 marker=dict(
                     size=10, 
-                    color=COLORS['primary']['highlight'],
-                    line=dict(width=0, color=COLORS['primary']['line'])
+                    color='rgba(0, 255, 65, 0.0)',
+                    line=dict(width=1, color=COLORS['primary']['line'])
                 ),
                 hovertext=cluster_df['enhanced_name'],
                 name=f'Cluster {cluster_id}',
@@ -411,7 +483,7 @@ def create_single_plot(df: pd.DataFrame, plot_type: str, selection: str,
             hoverinfo='none'
         ))
     else:
-        fig.add_trace(go.Scatter(
+        fig.add_trace(go.Scattergl(
             x=selected['UMAP1'], 
             y=selected['UMAP2'],
             mode='markers+text',
@@ -442,62 +514,90 @@ def create_single_plot(df: pd.DataFrame, plot_type: str, selection: str,
     results = html.Div([
         html.H5(
             f"Top {NEAREST_NEIGHBORS} foods similar to: {selected_name}",
-            className="neon-title"  # Use CSS class
+            className="neon-title"
         ),
         html.P(
             f"Cluster: {cluster_id}",
-            className="neon-subtitle"  # Use CSS class
+            className="neon-subtitle"
         ),
         table
-    ], className="results-container mt-4")  # Container class handles the background/padding
+    ], className="results-container mt-4")
 
     return fig, results
 
 
-def create_comparison_plot(df: pd.DataFrame, plot_type: str, selection_1: str, selection_2: str,
+def create_comparison_plot(df: pd.DataFrame, plot_type: str, selections: List[str],
                           show_cluster: bool, color_mapping: Dict[str, str]) -> Tuple[go.Figure, html.Div]:
-    value_1, type_1 = parse_selection(selection_1)
-    value_2, type_2 = parse_selection(selection_2)
+    selected_foods = []
+    cluster_ids = []
     
-    if not value_1 or not value_2:
-        return create_base_plot(df, plot_type, color_mapping), html.Div()
+    for selection in selections:
+        value, search_type = parse_selection(selection)
+        if not value:
+            continue
+            
+        selected = get_matching_row(df, value, search_type)
+        if not selected.empty:
+            selected_foods.append(selected)
+            cluster_ids.append(selected['cluster'].values[0])
     
-    selected_1 = get_matching_row(df, value_1, type_1)
-    selected_2 = get_matching_row(df, value_2, type_2)
-    
-    if selected_1.empty or selected_2.empty:
-        return create_base_plot(df, plot_type, color_mapping), html.Div("One or both foods not found")
-    
-    cluster_1 = selected_1['cluster'].values[0]
-    cluster_2 = selected_2['cluster'].values[0]
+    if len(selected_foods) < 2:
+        return create_base_plot(df, plot_type, color_mapping), html.Div("Need at least 2 valid foods for comparison")
     
     if show_cluster:
-        base_df = df[(df['cluster'] == cluster_1) | (df['cluster'] == cluster_2)].copy()
+        base_df = df[df['cluster'].isin(cluster_ids)].copy()
     else:
         base_df = df.copy()
     
     coords_cols = ['UMAP1', 'UMAP2', 'UMAP3'] if plot_type == '3d' else ['UMAP1', 'UMAP2']
     coords = df[coords_cols].values
-    selected_coords_1 = selected_1[coords_cols].values[0]
-    selected_coords_2 = selected_2[coords_cols].values[0]
     
-    df.loc[:, 'distance_1'] = np.linalg.norm(coords - selected_coords_1, axis=1)
-    df.loc[:, 'distance_2'] = np.linalg.norm(coords - selected_coords_2, axis=1)
-    
-    neighbors_1 = df[df.index != selected_1.index[0]].nsmallest(NEAREST_NEIGHBORS, 'distance_1')
-    neighbors_2 = df[df.index != selected_2.index[0]].nsmallest(NEAREST_NEIGHBORS, 'distance_2')
+    neighbors_data = []
+    for i, selected in enumerate(selected_foods):
+        selected_coords = selected[coords_cols].values[0]
+        df.loc[:, f'distance_{i}'] = np.linalg.norm(coords - selected_coords, axis=1)
+        neighbors = df[df.index != selected.index[0]].nsmallest(NEAREST_NEIGHBORS, f'distance_{i}')
+        neighbors_data.append(neighbors)
     
     fig = create_base_plot(base_df, plot_type, color_mapping)
     
-    selected_name_1 = selected_1['enhanced_name'].values[0] if 'enhanced_name' in selected_1.columns else value_1
-    selected_name_2 = selected_2['enhanced_name'].values[0] if 'enhanced_name' in selected_2.columns else value_2
+    if plot_type == '3d':
+        for i in range(len(selected_foods) - 1):
+            fig.add_trace(go.Scatter3d(
+                x=[selected_foods[i]['UMAP1'].values[0], selected_foods[i+1]['UMAP1'].values[0]],
+                y=[selected_foods[i]['UMAP2'].values[0], selected_foods[i+1]['UMAP2'].values[0]],
+                z=[selected_foods[i]['UMAP3'].values[0], selected_foods[i+1]['UMAP3'].values[0]],
+                mode='lines',
+                line=dict(
+                    color=COLORS['comparison']['colors'][i % len(COLORS['comparison']['colors'])],
+                    width=2,
+                    dash='dash'
+                ),
+                name=f'Connection {i+1}-{i+2}',
+                showlegend=True,
+                hoverinfo='none'
+            ))
+    else:
+        for i in range(len(selected_foods) - 1):
+            fig.add_trace(go.Scattergl(
+                x=[selected_foods[i]['UMAP1'].values[0], selected_foods[i+1]['UMAP1'].values[0]],
+                y=[selected_foods[i]['UMAP2'].values[0], selected_foods[i+1]['UMAP2'].values[0]],
+                mode='lines',
+                line=dict(
+                    color=COLORS['comparison']['colors'][i % len(COLORS['comparison']['colors'])],
+                    width=2,
+                    dash='dash'
+                ),
+                name=f'Connection {i+1}-{i+2}',
+                showlegend=True,
+                hoverinfo='none'
+            ))
     
-    selections = [
-        (selected_1, COLORS['comparison']['color_1'], COLORS['comparison']['border_1'], selected_name_1, 'diamond'),
-        (selected_2, COLORS['comparison']['color_2'], COLORS['comparison']['border_2'], selected_name_2, 'diamond')
-    ]
-    
-    for selected, color, border_color, name, symbol in selections:
+    for i, selected in enumerate(selected_foods):
+        selected_name = selected['enhanced_name'].values[0] if 'enhanced_name' in selected.columns else selections[i].split(':', 1)[1]
+        color_idx = i % len(COLORS['comparison']['colors'])
+        border_color = COLORS['comparison']['borders'][color_idx]
+        
         if plot_type == '3d':
             fig.add_trace(go.Scatter3d(
                 x=selected['UMAP1'], 
@@ -506,75 +606,62 @@ def create_comparison_plot(df: pd.DataFrame, plot_type: str, selection_1: str, s
                 mode='markers+text',
                 marker=dict(
                     size=14, 
-                    color=color,
-                    symbol=symbol,
-                    line=dict(width=1, color=border_color),
+                    color=COLORS['comparison']['colors'][color_idx],
+                    symbol='diamond',
+                    line=dict(width=6, color=border_color),
                     opacity=0.9
                 ),
-                text=[name],
+                text=[f"Food {i+1}: {selected_name}"],
                 textposition="top center",
-                textfont=dict(color=color, size=12),
-                name=f'Selected: {name}',
+                textfont=dict(color=COLORS['comparison']['colors'][color_idx], size=12),
+                name=f'Food {i+1}: {selected_name}',
                 showlegend=True,
                 hoverinfo='none'
             ))
         else:
-            fig.add_trace(go.Scatter(
+            fig.add_trace(go.Scattergl(
                 x=selected['UMAP1'], 
                 y=selected['UMAP2'],
                 mode='markers+text',
                 marker=dict(
                     size=16, 
-                    color=color,
-                    symbol=symbol,
-                    line=dict(width=3, color=border_color),
+                    color=COLORS['comparison']['colors'][color_idx],
+                    symbol='diamond',
+                    line=dict(width=6, color=border_color),
                     opacity=0.9
                 ),
-                text=[name],
+                text=[f"Food {i+1}: {selected_name}"],
                 textposition="top center",
-                textfont=dict(color=color, size=12),
-                name=f'Selected: {name}',
+                textfont=dict(color=COLORS['comparison']['colors'][color_idx], size=12),
+                name=f'Food {i+1}: {selected_name}',
                 showlegend=True,
                 hoverinfo='none'
             ))
     
-    table_1 = dbc.Table.from_dataframe(
-        neighbors_1[['enhanced_name', 'distance_1']].reset_index(drop=True)
-        .rename(columns={'enhanced_name': 'Food Name', 'distance_1': 'Distance'}),
-        striped=True, bordered=False, hover=True, size='sm',
-        className="results-table mt-2"
-    )
+    tables = []
+    for i, (selected, neighbors) in enumerate(zip(selected_foods, neighbors_data)):
+        selected_name = selected['enhanced_name'].values[0] if 'enhanced_name' in selected.columns else selections[i].split(':', 1)[1]
 
-    table_2 = dbc.Table.from_dataframe(
-        neighbors_2[['enhanced_name', 'distance_2']].reset_index(drop=True)
-        .rename(columns={'enhanced_name': 'Food Name', 'distance_2': 'Distance'}),
-        striped=True, bordered=False, hover=True, size='sm',
-        className="results-table mt-2"
-    )
-
-    results = dbc.Row([
-        dbc.Col([
+        table_data = neighbors[['enhanced_name', f'distance_{i}']].reset_index(drop=True)
+        table = dbc.Table.from_dataframe(
+            table_data.rename(columns={'enhanced_name': 'Food Name', f'distance_{i}': 'Distance'}),
+            striped=True,
+            bordered=False,
+            hover=True,
+            className="results-table mt-3"
+        )
+        
+        tables.append(html.Div([
             html.H5(
-                f"Similar to: {selected_name_1}",
-                className="neon-title"  # Use CSS class instead of inline styles
+                f"Food {i+1}: {selected_name}",
             ),
-            html.P(
-                f"Cluster: {cluster_1}",
-                className="neon-subtitle"  # Use CSS class instead of inline styles
-            ),
-            table_1
-        ], width=6),
-        dbc.Col([
-            html.H5(
-                f"Similar to: {selected_name_2}",
-                className="neon-title"  # Use CSS class instead of inline styles
-            ),
-            html.P(
-                f"Cluster: {cluster_2}",
-                className="neon-subtitle"  # Use CSS class instead of inline styles
-            ),
-            table_2
-        ], width=6)
-    ], className="mt-4")
+            html.P(f"Cluster: {cluster_ids[i]}"),
+            table
+        ], className="comparison-section mb-4"))
+    
+    results = html.Div([
+        html.H4("Food Comparison Results", className="neon-title"),
+        html.Div(tables, className="comparison-container")
+    ], className="results-container mt-4")
     
     return fig, results

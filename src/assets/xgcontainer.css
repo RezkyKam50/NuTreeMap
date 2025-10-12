@@ -1,0 +1,125 @@
+/* Nutri-XG Card Animation with Linear Gradient */
+.nutrixg-card {
+  border: 1px solid #00ffaf;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #2A3238 0%,
+    #2A3238 100%
+  );
+  background-size: 200% 200%;
+}
+
+/* Animated gradient background on card hover */
+.nutrixg-card {
+  background: linear-gradient(
+    125deg,
+    #7575757a 0%,
+    #0000007a 25%,
+    #7575757a 50%,
+    #0000007a 75%,
+    #7575757a 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientShift 10s ease-in-out infinite;
+  border-color: #00ffaf;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.3);
+  transition: box-shadow 0.5s ease, border-color 0.5s ease;
+}
+.nutrixg-card:hover {
+  background: linear-gradient(
+    125deg,
+    #1b928634 0%,
+    #0000007a 25%,
+    #1b928634 50%,
+    #0000007a 75%,
+    #1b928634 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientShift 10s ease-in-out infinite;
+  border-color: #00ffaf;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.3);
+  transition: opacity 0.8s ease;
+}
+.nutrixg-card:hover::before {
+  opacity: 1;
+}
+
+.nutrixg-card .card-body {
+  position: relative;
+  z-index: 1;
+}
+
+/* Gradient animation */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+@keyframes gradientShiftVibrant {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 100%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Ensure card content stays above the animated background */
+.nutrixg-card .card-body {
+  position: relative;
+  z-index: 1;
+}
+
+/* Nutri-XG Title Glow on Card Hover */
+.nutrixg-card:hover .nutrixg-title {
+  text-shadow: 0 0 10px rgba(0, 255, 175, 0.6);
+  transition: text-shadow 0.3s ease;
+}
+
+/* Alternative: Diagonal sweep gradient */
+/*
+.nutrixg-card:hover {
+  background: linear-gradient(
+    45deg,
+    #2A3238 0%,
+    #1e3a32 15%,
+    #2A3238 30%,
+    #1e3a32 45%,
+    #2A3238 60%,
+    #1e3a32 75%,
+    #2A3238 90%,
+    #1e3a32 100%
+  );
+  background-size: 300% 300%;
+  animation: diagonalSweep 2.5s linear infinite;
+}
+
+@keyframes diagonalSweep {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+*/

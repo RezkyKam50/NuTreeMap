@@ -7,8 +7,11 @@ from dash import (
     State, 
     callback, 
     MATCH, 
-    ALL
+    ALL,
+    clientside_callback,
+    ctx
 )
+import dash
 from utils.config.config import (
     PLOT_HEIGHT, 
     NEAREST_NEIGHBORS, 
@@ -17,7 +20,6 @@ from utils.config.config import (
 from utils.Init import Init
 import dash_bootstrap_components as dbc
 import plotly.express as px
-import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
@@ -26,14 +28,27 @@ from typing import Dict, List, Tuple, Optional, Any
 plot_df_3d, plot_df_2d, loaded_models, all_names, all_food_types_1, all_food_types_2 = Init()
 
 # Initialize Dash app
-app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY], assets_folder='assets')
 app.title = "NuTreeMap"
+
 
 # Layout
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H1("NuTreeMap", className="text-center my-4")
+            html.Div([
+                html.Img(
+                    src="/assets/Logo.png",
+                    style={
+                        "height": "100px",
+                        "marginRight": "15px"
+                    }
+                ),
+                html.H1(
+                "The Nutritionist Analytics Dashboard.",
+                className="company-text"
+                )
+            ], className="app-title d-flex align-items-center justify-content-center my-4")
         ])
     ]),
     
@@ -41,7 +56,7 @@ app.layout = dbc.Container([
     html.Hr(style={'borderColor': '#00ffaf', 'marginTop': '20px', 'marginBottom': '20px'}),
     dbc.Row([
         dbc.Col([
-            html.H2("NuMAP", style={'color': '#00ffaf', 'marginBottom': '20px'})
+            html.H2("Constellation", style={'color': '#00ffaf', 'marginBottom': '20px'})
         ])
     ]),
     
@@ -72,70 +87,48 @@ app.layout = dbc.Container([
                         ], width=6)
                     ], className="mb-3"),
                     
-                    # Search Section - Always render both, hide with CSS
+                    # Dynamic Search Sections
+                    html.Div(id='search-sections-container', children=[
+                        # Initial search section
+                        dbc.Row([
+                            dbc.Col([
+                                html.Div([
+                                    html.H5("Food 1", style={'color': '#00ffaf'}),
+                                    dbc.Input(
+                                        id={'type': 'search-input', 'index': 0}, 
+                                        placeholder="Search food...", 
+                                        value="", 
+                                        className="mb-2",
+                                        style={
+                                            'backgroundColor': '#3A4249',
+                                            'color': '#00ffaf',
+                                            'borderColor': '#00ffaf',
+                                            'borderWidth': '1px'
+                                        }
+                                    ),
+                                    dcc.Dropdown(
+                                        id={'type': 'search-dropdown', 'index': 0}, 
+                                        placeholder="Select from results...",
+                                        style={
+                                            'backgroundColor': '#3A4249',
+                                            'color': '#00ffaf',
+                                            'borderColor': '#00ffaf',
+                                            'borderWidth': '1px'
+                                        },
+                                        className="custom-dropdown",
+                                    )
+                                ], className='glow-card search-section')
+                            ], width=6)
+                        ], className="mb-3")
+                    ]),
+                    
+                    # Add/Remove Food Buttons
                     dbc.Row([
                         dbc.Col([
-                            html.Div([
-                                html.H5("Food 1", style={'color': '#00ffaf'}),
-                                dbc.Input(
-                                    id='search-1', 
-                                    placeholder="Search food...", 
-                                    value="Beef", 
-                                    className="mb-2",
-                                    style={
-                                        'backgroundColor': '#3A4249',
-                                        'color': '#00ffaf',
-                                        'borderColor': '#00ffaf',
-                                        'borderWidth': '1px'
-                                    }
-                                ),
-                                dcc.Dropdown(
-                                    id='dropdown-1', 
-                                    placeholder="Select from results...",
-                                    style={
-                                        'backgroundColor': '#3A4249',
-                                        'color': '#00ffaf',
-                                        'borderColor': '#00ffaf',
-                                        'borderWidth': '1px'
-                                    },
-                                    className="custom-dropdown",
-                                )
-                            ], id='search-section-1', style={'backgroundColor': '#3A4249', 'padding': '15px', 'borderRadius': '5px'})
-                        ], width=6),
-                        dbc.Col([
-                            html.Div([
-                                html.H5("Food 2", style={'color': '#00ffaf'}),
-                                dbc.Input(
-                                    id='search-2', 
-                                    placeholder="Search food...", 
-                                    value="Chicken", 
-                                    className="mb-2",
-                                    style={
-                                        'backgroundColor': '#3A4249',
-                                        'color': '#00ffaf',
-                                        'borderColor': '#00ffaf',
-                                        'borderWidth': '1px'
-                                    }
-                                ),
-                                dcc.Dropdown(
-                                    id='dropdown-2', 
-                                    placeholder="Select from results...",
-                                    style={
-                                        'backgroundColor': '#3A4249',
-                                        'color': '#00ffaf',
-                                        'borderColor': '#00ffaf',
-                                        'borderWidth': '1px'
-                                    },
-                                    className="custom-dropdown",
-                                )
-                            ], id='search-section-2', style={
-                                'display': 'none', 
-                                'backgroundColor': '#3A4249', 
-                                'padding': '15px', 
-                                'borderRadius': '5px'
-                            })
-                        ], width=6)
-                    ], className="mb-3"),
+                            dbc.Button("Add Food", id="add-food-btn", color="success", size="sm", className="me-2"),
+                            dbc.Button("Remove Food", id="remove-food-btn", color="danger", size="sm")
+                        ], width=12, className="mb-3")
+                    ], id="food-controls", style={'display': 'none'}),
                     
                     # Control Options
                     dbc.Row([
@@ -164,13 +157,28 @@ app.layout = dbc.Container([
                     html.P("Clustering is done purely by nutritional content, not by food name or type", 
                            className="text-muted small"),
                     
-                    # Plot
+                    # Plot and Bar Chart Side by Side
                     dbc.Row([
                         dbc.Col([
-                            dcc.Graph(id='main-plot', style={'height': f'{PLOT_HEIGHT}px'})
-                        ])
+                            dcc.Graph(
+                                id='main-plot', 
+                                style={'height': f'{PLOT_HEIGHT}px'},
+                                config={'scrollZoom': True, 'displayModeBar': True},
+                                clear_on_unhover=True
+                            )
+                        ], width=8),
+                        dbc.Col([
+                            dcc.Graph(
+                                id='cluster-barplot',
+                                className="cluster-barplot",
+                                config={'displayModeBar': True},
+                                style={
+                                    'overflowX': 'auto',   # enable vertical scroll
+                                    'overflowY': 'auto',   # enable vertical scroll
+                                }
+                            )
+                        ], width=4)
                     ]),
-                    
                     # Results Table
                     html.Div(id='results-table', className="results-container mt-4", style={'backgroundColor': 'transparent'})
                 ])
@@ -178,12 +186,85 @@ app.layout = dbc.Container([
         ])
     ], className="mb-4"),
 
-    html.Hr(),
+    # Separator before Globe Section
+    html.Hr(style={'borderColor': '#00ffaf', 'marginTop': '40px', 'marginBottom': '20px'}),
+    
+    # Globe Section - Now Separated
+    dbc.Row([
+        dbc.Col([
+            html.H2("GAIA-GX", style={'color': '#00ffaf', 'marginBottom': '20px'})
+        ])
+    ]),
+    
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardBody([
+                    # Add cosmic background elements
+                    html.Div(className="cosmic-dust"),
+                    html.Div(className="galaxy-bg"),
+                    dbc.Row([
+                        dbc.Col([
+                            dbc.Label("Select Region:", style={'color': 'white'}),
+                            dcc.Dropdown(
+                                id='region-selector',
+                                options=[
+                                    {'label': 'North America', 'value': 'NA'},
+                                    {'label': 'South America', 'value': 'SA'},
+                                    {'label': 'Europe', 'value': 'EU'},
+                                    {'label': 'Africa', 'value': 'AF'},
+                                    {'label': 'Asia', 'value': 'AS'},
+                                    {'label': 'Oceania', 'value': 'OC'}
+                                ],
+                                value='NA',
+                                style={
+                                    'backgroundColor': '#3A4249',
+                                    'color': '#00ffaf',
+                                    'borderColor': '#00ffaf'
+                                },
+                                className="mb-3"
+                            )
+                        ], width=6),
+                        dbc.Col([
+                            dbc.Label("Visualization Mode:", style={'color': 'white'}),
+                            dcc.Dropdown(
+                                id='globe-mode',
+                                options=[
+                                    {'label': 'Geographic', 'value': 'geo'},
+                                    {'label': 'Orthographic', 'value': 'ortho'},
+                                    {'label': 'Natural Earth', 'value': 'natural'}
+                                ],
+                                value='ortho',
+                                style={
+                                    'backgroundColor': '#3A4249',
+                                    'color': '#00ffaf',
+                                    'borderColor': '#00ffaf'
+                                },
+                                className="mb-3"
+                            )
+                        ], width=6)
+                    ]),
+                    
+                    dbc.Row([
+                        dbc.Col([
+                            dcc.Graph(
+                                id='earth-globe',
+                                style={'height': '1000px'},
+                                config={'displayModeBar': True, 'scrollZoom': True}
+                            )
+                        ])
+                    ])
+                ], className="globe-container")
+            ], className='globe-card', style={'backgroundColor': '#2A3238', 'border': '2px solid #00ffaf', 'position': 'relative'})
+        ])
+    ], className="mb-4"),
+
+    html.Hr(style={'borderColor': '#00ffaf', 'marginTop': '40px', 'marginBottom': '20px'}),
 
     # Nutri-XG Predictor - Always Visible
     dbc.Row([
         dbc.Col([
-            html.H3("Nutri-XG Predictor", style={'color': '#00ffaf', 'marginBottom': '20px'})
+            html.H2("Nu-XG", style={'color': '#00ffaf', 'marginBottom': '20px'}, className="nutrixg-title")
         ])
     ]),
     
@@ -212,7 +293,8 @@ app.layout = dbc.Container([
                             html.H5("Known Nutritional Values", className="mt-4", style={'color': '#00ffaf'}),
                             html.Small("Enter known values. Leave as 0 if unknown.", 
                                     className="text-muted mb-3"),
-                            
+                            html.Br(),
+
                             dbc.Label("Protein (g)", style={'color': 'white'}),
                             dbc.Input(
                                 id='protein-input', 
@@ -288,7 +370,7 @@ app.layout = dbc.Container([
                                 }
                             ),
                             
-                            dbc.Button("🔮 Predict Nutrients", id="predict-btn", 
+                            dbc.Button("Predict Nutrients", id="predict-btn", 
                                     color="primary", className="mt-3 w-100")
                         ], width=6),
                         
@@ -308,20 +390,27 @@ app.layout = dbc.Container([
                         ], width=6)
                     ])
                 ])
-            ], style={'backgroundColor': '#2A3238', 'border': '1px solid #00ffaf'})
+            ], className='nutrixg-card')
         ])
-    ], className="mt-4")
-], fluid=True, style={'backgroundColor': "#3A4249", 'color': 'white', 'minHeight': '100vh'})
+    ], className="mb-4")
+], fluid=True)
+
+
 
 # Import callbacks after app is defined
-# This is important to avoid circular imports
-from utils.SearchBlock import (
-    toggle_search_sections,
-    update_dropdown_1, 
-    update_dropdown_2
+from utils.Constellation.SearchBlock import update_dropdown, update_search_sections, create_search_section
+from utils.Constellation.Clustering import update_plot
+from utils.NuXG.XGBRegression import predict_nutrients
+from utils.GAIAGX.Globe import update_globe
+
+# Update dropdown callback to handle dynamic inputs
+@callback(
+    Output({'type': 'search-dropdown', 'index': MATCH}, 'options'),
+    Input({'type': 'search-input', 'index': MATCH}, 'value'),
+    prevent_initial_call=True
 )
-from utils.Clustering import update_plot
-from utils.XGBRegression import predict_nutrients
+def update_dropdown_callback(search_value):
+    return update_dropdown(search_value)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

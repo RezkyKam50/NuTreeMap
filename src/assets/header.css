@@ -1,0 +1,28 @@
+/* ====== Title + Logo Container ====== */
+.app-title {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* center horizontally */
+    gap: 15px;
+}
+
+/* ====== Logo Styling ====== */
+.app-logo {
+    height: 60px;
+    width: auto;
+    filter: drop-shadow(0 0 8px #ffffff);
+}
+
+/* ====== Glowing Text Effect ====== */
+.company-text {
+    font-size: 2rem;
+    font-weight: 100;
+    color: #ffffff;
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 10px #ffffff;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+ 

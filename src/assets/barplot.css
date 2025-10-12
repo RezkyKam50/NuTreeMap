@@ -1,0 +1,52 @@
+/* Plotly figure container styling */
+.cluster-barplot {
+  border-radius: 16px;
+  overflow: hidden; /* keeps corners clean */
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.15);
+  background-color: rgba(42, 50, 56, 0.9);
+  padding: 6px;
+}
+
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+.cluster-barplot:hover {
+  background: linear-gradient(
+    10deg,
+    #23635d34 0%,
+    #0000007a 25%,
+    #23635d34 50%,
+    #0000007a 75%,
+    #23635d34 100%
+  );
+  background-size: 500% 500%;
+  animation: gradientShift 10s ease-in-out infinite;
+  border-color: #00ffaf;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.3);
+  transition: opacity 0.8s ease;
+}
+
+.cluster-barplot {
+  background: linear-gradient(
+    10deg,
+    #4b4b4b34 0%,
+    #0000007a 25%,
+    #4b4b4b34 50%,
+    #0000007a 75%,
+    #4b4b4b34 100%
+  );
+  background-size: 500% 500%;
+  animation: gradientShift 10s ease-in-out infinite;
+  border-color: #00ffaf;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.3);
+  transition: opacity 0.8s ease;
+}

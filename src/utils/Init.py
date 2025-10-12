@@ -9,11 +9,11 @@ from dash import (
     MATCH, 
     ALL
 )
-from utils.xgb_infer import (
+from utils.NuXG.xgb_infer import (
     load_models_and_components, 
     predict_with_loaded_models
 )
-from utils.Loader import LoadDataset
+from utils.Constellation.Loader import LoadDataset
 
 
 def Init():

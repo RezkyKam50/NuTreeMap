@@ -1,5 +1,5 @@
 from dash import Input, Output, State, callback, html
-from utils.xgb_infer import predict_with_loaded_models
+from utils.NuXG.xgb_infer import predict_with_loaded_models
 import dash_bootstrap_components as dbc
 import pandas as pd
 from typing import Optional
@@ -7,6 +7,7 @@ from typing import Optional
 
 @callback(
     Output('prediction-output', 'children'),
+    Output('prediction-output', 'key'),  # Add key output to force re-render
     Input('predict-btn', 'n_clicks'),
     [State('food-name-input', 'value'),
      State('protein-input', 'value'),
@@ -17,7 +18,7 @@ from typing import Optional
     prevent_initial_call=True
 )
 def predict_nutrients(n_clicks: int, food_name: str, protein: float, fat: float,
-                     carbs: float, sodium: float, cholesterol: float) -> html.Div:
+                     carbs: float, sodium: float, cholesterol: float):
     from app import loaded_models
     try:
         numeric_values = {
@@ -40,7 +41,7 @@ def predict_nutrients(n_clicks: int, food_name: str, protein: float, fat: float,
         model_type = "Text-Only Model (2 nutrients)" if numeric_values is None else "Mixed Model (13 nutrients)"
         
         output = [
-            dbc.Alert(f"✅ Used {model_type} for: {results['food_name']}", color="success")
+            dbc.Alert(f"Used {model_type} for: {results['food_name']}", color="success")
         ]
         
         if results['model1_predictions']:
@@ -78,7 +79,8 @@ def predict_nutrients(n_clicks: int, food_name: str, protein: float, fat: float,
                                         striped=True, bordered=True, hover=True, size='sm')
             ])
         
-        return html.Div(output)
+        # Return both the content and a unique key based on n_clicks to force re-render
+        return html.Div(output, className="prediction-animate"), str(n_clicks)
         
     except Exception as e:
-        return dbc.Alert(f"❌ Error: {str(e)}", color="danger")
+        return dbc.Alert(f"❌ Error: {str(e)}", color="danger"), str(n_clicks)

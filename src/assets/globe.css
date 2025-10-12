@@ -1,0 +1,302 @@
+/* Globe Card Styling with Rounded Borders */
+.globe-card {
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 255, 175, 0.3);
+}
+
+/* Globe Container */
+.globe-container {
+    border-radius: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Globe Graph Container */
+#earth-globe {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Colorbar Styling with Rounded Borders */
+.js-plotly-plot .plotly .colorbar {
+    border-radius: 10px !important;
+}
+
+/* Legend Styling with Rounded Borders */
+.js-plotly-plot .plotly .legend {
+    border-radius: 10px !important;
+}
+
+/* Dropdown Styling for Globe Section */
+#region-selector,
+#globe-mode {
+    border-radius: 8px !important;
+}
+
+/* Add glow effect to globe card */
+.globe-card:hover {
+    box-shadow: 0 0 40px rgba(0, 255, 175, 0.5);
+    transition: box-shadow 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Stars Background for Globe Section */
+#earth-globe {
+    position: relative;
+    background: radial-gradient(ellipse at bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%);
+    overflow: hidden;
+}
+
+/* Create multiple layers of stars */
+#earth-globe::before,
+#earth-globe::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+/* Small stars layer */
+#earth-globe::before {
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 60px 70px, #00ffaf, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 50px 50px, #00ffaf, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 130px 80px, #00ffaf, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 10px, #00ffaf, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: stars-move 100s linear infinite;
+    opacity: 0.5;
+}
+
+/* Larger stars layer */
+#earth-globe::after {
+    background-image:
+        radial-gradient(3px 3px at 40px 60px, #00ffaf, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 110px 90px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 150px 30px, #00ffaf, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 70px 140px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 180px 120px, #00ffaf, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 250px 250px;
+    animation: stars-move 150s linear infinite;
+    opacity: 0.3;
+}
+
+/* Shooting stars effect */
+@keyframes shooting-star {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-300px) translateY(300px);
+        opacity: 0;
+    }
+}
+
+/* Stars movement animation */
+@keyframes stars-move {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(-200px);
+    }
+}
+
+/* Twinkling stars effect */
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Apply twinkling to the before pseudo-element */
+#earth-globe::before {
+    animation: stars-move 100s linear infinite, twinkle 3s ease-in-out infinite;
+}
+
+/* Globe card container styling */
+.globe-container {
+    background: linear-gradient(to bottom, #0f1419 0%, #1a1f24 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add nebula effect in background */
+.globe-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(12, 12, 12, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(0, 0, 0, 0.05) 0%, transparent 50%);
+    animation: nebula-rotate 60s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes nebula-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Ensure globe graph is above background effects */
+#earth-globe .js-plotly-plot {
+    position: relative;
+    z-index: 1;
+}
+
+/* Optional: Add glow effect to globe card border */
+.globe-card {
+    box-shadow: 
+        0 0 20px rgba(0, 255, 175, 0.3),
+        inset 0 0 20px rgba(0, 255, 175, 0.05);
+    border: 2px solid #00ffaf !important;
+    position: relative;
+}
+
+/* Add cosmic dust particles */
+.cosmic-dust {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cosmic-dust::before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: white;
+    box-shadow: 
+        100px 200px #00ffaf, 200px 300px #00ffaf, 300px 100px #00ffaf,
+        400px 400px #00ffaf, 500px 150px #00ffaf, 600px 350px #00ffaf,
+        150px 450px #00ffaf, 350px 250px #00ffaf, 450px 50px #00ffaf,
+        50px 350px #00ffaf, 250px 450px #00ffaf, 550px 250px #00ffaf;
+    animation: twinkle 4s ease-in-out infinite;
+}
+
+/* Pulsing stars */
+@keyframes pulse-star {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+/* Distant galaxies effect */
+.galaxy-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: 
+        radial-gradient(ellipse at 10% 20%, rgba(255, 0, 55, 0.05) 0%, transparent 40%),
+        radial-gradient(ellipse at 90% 80%, rgba(226, 43, 52, 0.05) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 50%, rgba(255, 0, 0, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Meteor shower effect (optional - can be toggled) */
+@keyframes meteor {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-45deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-500px) translateY(500px) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+.meteor {
+    position: absolute;
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    animation: meteor 3s linear infinite;
+    opacity: 0;
+}
+
+.meteor:nth-child(1) {
+    top: 10%;
+    left: 90%;
+    animation-delay: 0s;
+}
+
+.meteor:nth-child(2) {
+    top: 20%;
+    left: 80%;
+    animation-delay: 1.5s;
+}
+
+.meteor:nth-child(3) {
+    top: 30%;
+    left: 70%;
+    animation-delay: 3s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

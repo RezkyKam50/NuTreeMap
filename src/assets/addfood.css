@@ -1,0 +1,133 @@
+/* Add Food Button Styling */
+#add-food-btn {
+    background: linear-gradient(135deg, #00ffaf 0%, #00cc8e 100%) !important;
+    border: 2px solid #00ffaf !important;
+    color: #ffffff !important;
+    font-weight: 200;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+    padding: 12px 24px !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 255, 175, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+#add-food-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+#add-food-btn:hover {
+    background: linear-gradient(135deg, #00cc8e 0%, #00ffaf 100%) !important;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 255, 175, 0.6);
+    border-color: #00ffcc !important;
+    animation: pulse-add 2s infinite;
+}
+
+#add-food-btn:hover::before {
+    left: 100%;
+}
+
+#add-food-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 10px rgba(0, 255, 175, 0.5);
+}
+
+#add-food-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 255, 175, 0.4), 0 4px 15px rgba(0, 255, 175, 0.4);
+}
+
+/* Remove Food Button Styling */
+#remove-food-btn {
+    background: linear-gradient(135deg, #ff4757 0%, #dc3545 100%) !important;
+    border: 2px solid #ff4757 !important;
+    color: white !important;
+    font-weight: 200;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+    padding: 12px 24px !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+#remove-food-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+#remove-food-btn:hover {
+    background: linear-gradient(135deg, #dc3545 0%, #ff4757 100%) !important;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(255, 71, 87, 0.6);
+    border-color: #ff6b7a !important;
+    animation: pulse-remove 2s infinite;
+}
+
+#remove-food-btn:hover::before {
+    left: 100%;
+}
+
+#remove-food-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 10px rgba(255, 71, 87, 0.5);
+}
+
+#remove-food-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.4), 0 4px 15px rgba(255, 71, 87, 0.4);
+}
+
+/* Disabled state styling */
+#add-food-btn:disabled,
+#remove-food-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Optional: Add icon styling if you want to enhance the + and - symbols */
+#add-food-btn::after {
+    margin-left: 5px;
+}
+
+#remove-food-btn::after {
+    margin-left: 5px;
+}
+
+/* Pulse animations for each button */
+@keyframes pulse-add {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(0, 255, 175, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(0, 255, 175, 0.7);
+    }
+}
+
+@keyframes pulse-remove {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(255, 71, 87, 0.7);
+    }
+}

@@ -1,0 +1,122 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('/assets/fonts/Inter.woff2') format('woff2'),
+       url('/assets/fonts/Inter.woff') format('woff'),
+       url('/assets/fonts/Inter.ttf') format('truetype');
+  font-weight: 100 900; /* Inter supports variable weights */
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
+/* Change legend text appearance */
+.js-plotly-plot .legend text {
+    fill: #00ffaf !important;          /* text color */
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 0 8px rgba(0, 255, 175, 0.8); /* neon glow effect */
+}
+
+/* Optional: Hover effect for legend items */
+.js-plotly-plot .legend .traces:hover text {
+    fill: #ffffff !important;
+    text-shadow: 0 0 10px #00ffaf !important;
+}
+
+/* Dropdown main box (closed state) */
+.dash-dropdown {
+  background-color: #3A4249 !important;
+  color: #00ffaf !important;
+  border: 1px solid #00ffaf !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 10px rgba(0, 255, 175, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover glow */
+.dash-dropdown:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 175, 0.35);
+}
+
+/* Dropdown control (clickable area) */
+.dash-dropdown .Select__control,
+.dash-dropdown .Select-control {
+  background-color: #3A4249 !important;
+  border: 1px solid #00ffaf !important;
+  border-radius: 8px !important;
+  color: #00ffaf !important;
+  box-shadow: 0 0 10px rgba(0, 255, 175, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Focus state (active dropdown glow) */
+.dash-dropdown .Select__control--is-focused,
+.dash-dropdown .Select-control.is-focused {
+  border-color: #00ffaf !important;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.5) !important;
+}
+
+/* Dropdown menu (the open list) */
+.dash-dropdown .Select__menu,
+.dash-dropdown .Select__menu-list,
+.dash-dropdown .Select-menu,
+.dash-dropdown .Select-menu-outer {
+  background-color: #3A4249 !important;
+  color: #00ffaf !important;
+  border: 1px solid #00ffaf !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.25);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Each option item */
+.dash-dropdown .Select__option,
+.dash-dropdown .Select-option {
+  background-color: #3A4249 !important;
+  color: #00ffaf !important;
+  border-radius: 0 !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hovered option */
+.dash-dropdown .Select__option--is-focused,
+.dash-dropdown .Select-option.is-focused {
+  background-color: #00ffaf !important;
+  color: #3A4249 !important;
+  text-shadow: 0 0 8px rgba(0, 255, 175, 0.6);
+}
+
+/* Selected text inside the box */
+.dash-dropdown .Select__single-value,
+.dash-dropdown .Select-value-label {
+  color: #00ffaf !important;
+}
+
+/* Placeholder text */
+.dash-dropdown .Select__placeholder,
+.dash-dropdown .Select-placeholder {
+  color: #00ffaf !important;
+  opacity: 0.7;
+}
+
+/* Focus outline when active */
+.dash-dropdown .Select__control--is-focused {
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.4) !important;
+  border-color: #00ffaf !important;
+}
+
+/* Smooth hover transitions */
+.dash-dropdown *,
+.dash-dropdown .Select__control,
+.dash-dropdown .Select__menu {
+  transition: all 0.25s ease;
+}
+
+
+
+
+
+

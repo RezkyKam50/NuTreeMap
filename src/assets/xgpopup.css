@@ -1,0 +1,210 @@
+/* Animation for the entire prediction output container */
+#prediction-output {
+    animation: fadeInScale 0.6s ease-out;
+}
+
+/* Fade in and scale animation */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Alert animation */
+#prediction-output .alert {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Table animation - staggered rows */
+#prediction-output table {
+    animation: fadeIn 0.7s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animate each table row with delay */
+#prediction-output table tbody tr {
+    animation: slideInRow 0.4s ease-out both;
+    opacity: 0;
+}
+
+#prediction-output table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+#prediction-output table tbody tr:nth-child(2) { animation-delay: 0.15s; }
+#prediction-output table tbody tr:nth-child(3) { animation-delay: 0.2s; }
+#prediction-output table tbody tr:nth-child(4) { animation-delay: 0.25s; }
+#prediction-output table tbody tr:nth-child(5) { animation-delay: 0.3s; }
+#prediction-output table tbody tr:nth-child(6) { animation-delay: 0.35s; }
+#prediction-output table tbody tr:nth-child(7) { animation-delay: 0.4s; }
+
+@keyframes slideInRow {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Heading animations */
+#prediction-output h6 {
+    animation: slideInFromTop 0.5s ease-out;
+}
+
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Glow effect on prediction button when clicked */
+#predict-btn {
+    transition: all 0.3s ease;
+}
+
+#predict-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 20px rgba(0, 255, 175, 0.6);
+}
+
+/* Loading state animation (optional - add this class via callback if needed) */
+.prediction-loading {
+    position: relative;
+}
+
+.prediction-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid rgba(0, 255, 175, 0.3);
+    border-top-color: #00ffaf;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+ 
+#prediction-output {
+  background: linear-gradient(
+    35deg,
+    #83838300 0%,
+    #08342bd5 25%,
+    #000000 50%,
+    #0f2b34a8 75%,
+    #00000021 100%
+  );
+  background-size: 500% 500%;
+  animation: gradientShift 10s ease-in-out infinite;
+  border-color: #00ffaf;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.3);
+}
+
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Pulse effect for values */
+#prediction-output table td:nth-child(2) {
+    animation: pulse 1s ease-in-out 0.5s;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        color: #00ffaf;
+    }
+}
+
+/* Hover effects for tables */
+#prediction-output table tbody tr {
+    transition: all 0.3s ease-in;
+}
+
+#prediction-output table tbody tr:hover {
+    background-color: rgba(0, 255, 175, 0.1) !important;
+    transform: translateX(5px);
+}
+
+/* Success alert pulse */
+#prediction-output .alert-success {
+    animation: alertPulse 0.5s ease-out;
+}
+
+@keyframes alertPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(253, 253, 253, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 0 100px rgba(0, 255, 175, 0);
+    }
+}
+
+
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.prediction-animate .alert-success {
+    background: linear-gradient(
+        50deg,
+        #00695258 0%,
+        #0000007a 25%,
+        #8a8a8a34 50%,
+        #0000007a 75%,
+        #393939b5 100%
+    );
+    background-size: 500% 500%;  /* Changed from 100% 100% */
+    animation: gradientShift 10s ease-in-out infinite;
+    border-color: #00ffaf;
+    box-shadow: 0 0 20px rgba(0, 255, 175, 0.3);
+    transition: opacity 0.8s ease;
+}
+
+
+

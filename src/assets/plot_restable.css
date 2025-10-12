@@ -1,98 +1,3 @@
-/* === Dark Dropdown Styling with Rounded Corners === */
-
-/* === Dark Dropdown Styling with Rounded Corners + Neon Glow === */
-
-/* Dropdown main box (closed state) */
-.dash-dropdown {
-  background-color: #3A4249 !important;
-  color: #00ffaf !important;
-  border: 1px solid #00ffaf !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 10px rgba(0, 255, 175, 0.15);
-  transition: all 0.3s ease;
-}
-
-/* Hover glow */
-.dash-dropdown:hover {
-  box-shadow: 0 0 15px rgba(0, 255, 175, 0.35);
-}
-
-/* Dropdown control (clickable area) */
-.dash-dropdown .Select__control,
-.dash-dropdown .Select-control {
-  background-color: #3A4249 !important;
-  border: 1px solid #00ffaf !important;
-  border-radius: 8px !important;
-  color: #00ffaf !important;
-  box-shadow: 0 0 10px rgba(0, 255, 175, 0.1);
-  transition: all 0.3s ease;
-}
-
-/* Focus state (active dropdown glow) */
-.dash-dropdown .Select__control--is-focused,
-.dash-dropdown .Select-control.is-focused {
-  border-color: #00ffaf !important;
-  box-shadow: 0 0 20px rgba(0, 255, 175, 0.5) !important;
-}
-
-/* Dropdown menu (the open list) */
-.dash-dropdown .Select__menu,
-.dash-dropdown .Select__menu-list,
-.dash-dropdown .Select-menu,
-.dash-dropdown .Select-menu-outer {
-  background-color: #3A4249 !important;
-  color: #00ffaf !important;
-  border: 1px solid #00ffaf !important;
-  border-radius: 8px !important;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 255, 175, 0.25);
-  transition: box-shadow 0.3s ease;
-}
-
-/* Each option item */
-.dash-dropdown .Select__option,
-.dash-dropdown .Select-option {
-  background-color: #3A4249 !important;
-  color: #00ffaf !important;
-  border-radius: 0 !important;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-/* Hovered option */
-.dash-dropdown .Select__option--is-focused,
-.dash-dropdown .Select-option.is-focused {
-  background-color: #00ffaf !important;
-  color: #3A4249 !important;
-  text-shadow: 0 0 8px rgba(0, 255, 175, 0.6);
-}
-
-/* Selected text inside the box */
-.dash-dropdown .Select__single-value,
-.dash-dropdown .Select-value-label {
-  color: #00ffaf !important;
-}
-
-/* Placeholder text */
-.dash-dropdown .Select__placeholder,
-.dash-dropdown .Select-placeholder {
-  color: #00ffaf !important;
-  opacity: 0.7;
-}
-
-/* Focus outline when active */
-.dash-dropdown .Select__control--is-focused {
-  box-shadow: 0 0 20px rgba(0, 255, 175, 0.4) !important;
-  border-color: #00ffaf !important;
-}
-
-/* Smooth hover transitions */
-.dash-dropdown *,
-.dash-dropdown .Select__control,
-.dash-dropdown .Select__menu {
-  transition: all 0.25s ease;
-}
-
-
 /* Plotly figure container styling */
 #main-plot {
   border-radius: 16px;
@@ -100,6 +5,34 @@
   box-shadow: 0 0 20px rgba(0, 255, 175, 0.15);
   background-color: rgba(42, 50, 56, 0.9);
   padding: 6px;
+}
+
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+#main-plot:hover {
+  background: linear-gradient(
+    10deg,
+    #23635d34 0%,
+    #0000007a 25%,
+    #23635d34 50%,
+    #0000007a 75%,
+    #23635d34 100%
+  );
+  background-size: 500% 500%;
+  animation: gradientShift 10s ease-in-out infinite;
+  border-color: #00ffaf;
+  box-shadow: 0 0 20px rgba(0, 255, 175, 0.3);
+  transition: opacity 0.8s ease;
 }
 
 /* Make legend blend better with dark theme */
@@ -119,7 +52,7 @@
 /* Optional hover effect */
 #main-plot:hover {
   box-shadow: 0 0 25px rgb(0, 255, 174);
-  transition: box-shadow 0.7s ease;
+  transition: box-shadow 0.1s ease-in-out;
 }
 
 
@@ -218,7 +151,8 @@
 
 .results-table tbody tr:hover {
   background-color: rgba(0, 255, 175, 0.1);
-  color: #00ffaf;
+  color: #ffffff;
+  text-shadow: 0 0 2px #ffffff, 0 0 10px #ffffff;
   transition: background-color 0.2s ease;
 }
 
@@ -227,5 +161,3 @@
 .results-table th {
   border: none !important;
 }
-
-
