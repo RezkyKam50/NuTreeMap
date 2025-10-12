@@ -8,23 +8,20 @@ from utils.GAIAGX.weather import fetch_weather_data, get_weather_description, ge
 
 def fetch_live_population_data() -> Dict[str, float]:
     try:
-        # World Bank API for population data (latest available)
         url = "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json&per_page=300&date=2023"
         
         response = requests.get(url, timeout=10)
         data = response.json()
-        
-        # Extract population data
+
         population_data = {}
         
         if len(data) > 1 and 'data' in data[1]:
             for item in data[1]:
                 if item['value'] is not None:
                     country_code = item['country']['id']
-                    population_millions = item['value'] / 1_000_000  # Convert to millions
+                    population_millions = item['value'] / 1_000_000   
                     population_data[country_code] = round(population_millions, 1)
         
-        # If API fails, fall back to a more robust public API
         if not population_data:
             return fetch_backup_population_data()
             
@@ -52,7 +49,6 @@ def fetch_backup_population_data() -> Dict[str, float]:
         
     except Exception as e:
         print(f"Error fetching backup population data: {e}")
-        # Final fallback to minimal hardcoded data for critical countries
         return get_minimal_fallback_data()
 
 def get_minimal_fallback_data() -> Dict[str, float]:
@@ -68,8 +64,6 @@ def get_minimal_fallback_data() -> Dict[str, float]:
     }
 
 def get_global_coordinates():
-    """Return random coordinates distributed globally"""
-    # Major regions with their approximate coordinate ranges
     regions = [
         # North America
         {'lat_range': (25, 55), 'lon_range': (-130, -70)},
@@ -85,7 +79,6 @@ def get_global_coordinates():
         {'lat_range': (-45, -10), 'lon_range': (110, 180)},
     ]
     
-    # Pick a random region
     region = random.choice(regions)
     
     # Generate random coordinates within that region
@@ -95,7 +88,6 @@ def get_global_coordinates():
     return lat, lon
 
 def fetch_rss_feeds():
-    """Fetch nutrition/food related RSS feeds"""
     feeds = [
         'http://rss.nytimes.com/services/xml/rss/nyt/Health.xml',
         'https://www.sciencedaily.com/rss/health_medicine/nutrition.xml',
@@ -105,10 +97,9 @@ def fetch_rss_feeds():
     for feed_url in feeds:
         try:
             feed = feedparser.parse(feed_url)
-            for entry in feed.entries[:5]:  # Limit to 5 entries per feed
+            for entry in feed.entries[:5]:  
                 lat, lon = get_global_coordinates()
-                
-                # Fetch weather data for this location
+
                 weather_data = fetch_weather_data(lat, lon)
                 
                 feed_entry = {
@@ -119,8 +110,7 @@ def fetch_rss_feeds():
                     'lat': lat,
                     'lon': lon
                 }
-                
-                # Add weather information if available
+
                 if weather_data:
                     feed_entry.update({
                         'temperature': f"{weather_data['temperature']:.1f}°C",

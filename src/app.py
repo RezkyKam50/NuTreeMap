@@ -195,7 +195,7 @@ app.layout = dbc.Container([
             html.H2("GAIA-GX", style={'color': '#00ffaf', 'marginBottom': '20px'})
         ])
     ]),
-    
+
     dbc.Row([
         dbc.Col([
             dbc.Card([
@@ -203,6 +203,13 @@ app.layout = dbc.Container([
                     # Add cosmic background elements
                     html.Div(className="cosmic-dust"),
                     html.Div(className="galaxy-bg"),
+                    
+                    # Hidden data stores for progressive loading
+                    dcc.Store(id='news-data-store'),
+                    dcc.Store(id='weather-data-store'),
+                    dcc.Store(id='earthquake-data-store'),
+                    dcc.Store(id='tide-data-store'),
+                    
                     dbc.Row([
                         dbc.Col([
                             dbc.Label("Select Region:", style={'color': 'white'}),
@@ -249,7 +256,7 @@ app.layout = dbc.Container([
                         dbc.Col([
                             dcc.Graph(
                                 id='earth-globe',
-                                style={'height': '1000px'},
+                                style={'height': '1200px'},
                                 config={'displayModeBar': True, 'scrollZoom': True}
                             )
                         ])
@@ -401,7 +408,7 @@ app.layout = dbc.Container([
 from utils.Constellation.SearchBlock import update_dropdown, update_search_sections, create_search_section
 from utils.Constellation.Clustering import update_plot
 from utils.NuXG.XGBRegression import predict_nutrients
-from utils.GAIAGX.Globe import update_globe
+import utils.GAIAGX.Globe 
 
 # Update dropdown callback to handle dynamic inputs
 @callback(
