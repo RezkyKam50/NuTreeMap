@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt, pandas as pd, xgboost as xgb, joblib, math, pickle, os
+import matplotlib.pyplot as plt, cudf, xgboost as xgb, joblib, math, pickle, os
 
-df = pd.read_parquet("./datasets/umapped3D.parquet")
+df = cudf.read_parquet("./datasets/umapped3D.parquet")
 
 def plotisna():
     missing = df.isna().sum()
