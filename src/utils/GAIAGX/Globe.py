@@ -19,7 +19,6 @@ from utils.GAIAGX.population import fetch_live_population_data, fetch_rss_feeds
 from utils.GAIAGX.seismic import recent_events
 from utils.GAIAGX.tide import fetch_tide_stations
 
-
 @callback(
     Output('earth-globe', 'figure'),
     [Input('region-selector', 'value'),
